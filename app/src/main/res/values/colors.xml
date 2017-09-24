@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    
+    <color name="colorNeon1">#FFFC49</color>
+    <color name="colorNeon2">#FFD855</color>
+    <color name="colorNeon3">#FFD627</color>
+    <color name="colorNeon4">#FFC01C</color>
+    <color name="colorNeon5">#FED334</color>
+
+    <color name="colorBg">#FCFFD9</color>
+
+    <color name="colorRank1">#FFFFC1</color>
+    <color name="colorRank2">#FFFF93</color>
+    <color name="colorRank3">#FFFF6D</color>
+    <color name="colorRank4">#FFFF3E</color>
+    <color name="colorRank5">#FFFF00</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+
+    <color name="colorAbu">#9E9E9E</color>
+    <color name="colorAbu2">#EEEEEE</color>
+
+    <color name="facebook">#3B5998</color>
+    <color name="facebook2">#3949AB</color>
+
+    <color name="grayui1">#7E7E7E</color>
+    <color name="grayui2">#424242</color>
+</resources>

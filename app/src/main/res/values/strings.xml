@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SkripsiMappaTransLand</string>
+    <string name="mappa">PT. Mappa Trans Land</string>
+    <string name="title_activity_main2">Report</string>
+
+    <string name="hello_world">Hello world du!</string>
+</resources>

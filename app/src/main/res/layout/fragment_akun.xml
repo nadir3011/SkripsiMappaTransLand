@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:textSize="16sp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/akunNama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nama"/>
+        <TextView
+            android:textSize="16sp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/akunUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"/>
+        <TextView
+            android:textSize="16sp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/akunTmpTgl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tempat/Tanggal Lahir"/>
+        <TextView
+            android:textSize="16sp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/akunAlamat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alamat"/>
+        <TextView
+            android:textSize="16sp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/akunKontak"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No Hp"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/colorAbu">
+    <include layout="@layout/toolbar2" android:id="@+id/toolbar2"/>
+    <LinearLayout
+        android:padding="18dp"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <EditText
+            android:alpha="0.85"
+            android:drawablePadding="16dp"
+            android:drawableLeft="@drawable/ic_supplier_24dp"
+            android:textSize="14dp"
+            android:textColorHint="@color/colorAbu"
+            android:textColor="@color/colorBlack"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/border_edittext"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:hint="supplier"
+            android:id="@+id/edt_supplier"/>
+        <EditText
+            android:maxLength="3"
+            android:inputType="numberSigned"
+            android:alpha="0.85"
+            android:drawablePadding="16dp"
+            android:drawableLeft="@drawable/ic_transaction_24dp"
+            android:textSize="14dp"
+            android:textColorHint="@color/colorAbu"
+            android:textColor="@color/colorBlack"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/border_edittext"
+            android:layout_marginTop="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:hint="jumlah transaksi"
+            android:layout_below="@id/img_mappa"
+            android:id="@+id/edt_transaction"/>
+    </LinearLayout>
+
+    <Button
+        android:clickable="true"
+        android:id="@+id/btn_lanjut_in"
+        android:layout_margin="12dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape_button_tad"
+        android:textColor="@color/colorWhite"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:text="Lanjut"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+</RelativeLayout>

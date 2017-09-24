@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/bottom_home"
+        app:showAsAction="always"
+        android:title="Home"
+        android:icon="@drawable/ic_home_24dp"
+        android:enabled="true"/>
+    <item
+        android:id="@+id/bottom_report"
+        app:showAsAction="always"
+        android:title="Report"
+        android:icon="@drawable/ic_assignment_24dp"
+        android:enabled="true"/>
+    <item
+        android:id="@+id/bottom_akun"
+        app:showAsAction="always"
+        android:title="Akun"
+        android:icon="@drawable/ic_person_24dp"
+        android:enabled="true"/>
+</menu>

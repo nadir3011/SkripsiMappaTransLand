@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grayui1">
+    <TextView
+        android:background="@color/colorNeon4"
+        android:id="@+id/txt_mappa"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold|italic"
+        android:textSize="32dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:gravity="center"
+        android:text="@string/mappa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/img_mappa"
+        android:layout_marginTop="12dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/mappa_logo"
+        android:layout_below="@id/txt_mappa"
+        android:layout_width="match_parent"
+        android:layout_height="160dp" />
+    <EditText
+        android:alpha="0.75"
+        android:drawablePadding="16dp"
+        android:drawableLeft="@drawable/ic_person_24dp"
+        android:textSize="24dp"
+        android:textColorHint="@color/grayui2"
+        android:textColor="@color/colorBlack"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@drawable/border_edittext"
+        android:layout_marginTop="36dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:hint="username"
+        android:layout_below="@id/img_mappa"
+        android:id="@+id/edt_username"/>
+    <EditText
+        android:alpha="0.75"
+        android:drawablePadding="16dp"
+        android:drawableLeft="@drawable/ic_lock_24dp"
+        android:textSize="24dp"
+        android:textColorHint="@color/grayui2"
+        android:textColor="@color/colorBlack"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@drawable/border_edittext"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:hint="password"
+        android:layout_below="@id/edt_username"
+        android:id="@+id/edt_password"/>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_margin="12dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape_button_tad"
+        android:textColor="@color/colorWhite"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:text="Login"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+</RelativeLayout>
