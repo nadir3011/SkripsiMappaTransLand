@@ -6,7 +6,7 @@ import android.os.Parcelable;
 
 public class Material implements Parcelable {
 
-    String kd_material, material, satuan, harga;
+    String kd_material, material, satuan, harga, kmi;
 
     public void setKd_material(String kd_material) {
         this.kd_material = kd_material;
