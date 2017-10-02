@@ -33,15 +33,12 @@ public class StokAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         this.material_stoks = material_stoks;
     }
 
-    public StokAdapter(Context context){
-        super();
-        this.context = context;
-    }
 
-    public StokAdapter(Context context, FragmentManager fm){
+    public StokAdapter(Context context, FragmentManager fm, List<Material_Stok> material_stoks){
         super();
         this.context = context;
         this.fm = fm;
+        this.material_stoks = material_stoks;
     }
 
     public int getItemViewType(int position){
@@ -92,11 +89,16 @@ public class StokAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof itemViewHolderStok){
+            final Material_Stok material_stok = material_stoks.get(position);
+//        holder.txt_nomor.setText(String.valueOf(position+1));
+//        holder.txt_kode.setText(material_stok.getKode());
+//        holder.txt_material.setText(material_stok.getNama());
+//        holder.txt_stok.setText(material_stok.getJml_stok());
             int sekarang = (MskTerz.datake*MskTerz.banyakdata)+(position)+1;
             ((itemViewHolderStok)holder).txt_nomor.setText(String.valueOf(sekarang));
-            ((itemViewHolderStok)holder).txt_kode.setText("Kode : MTR-"+String.valueOf(sekarang));
-            ((itemViewHolderStok)holder).txt_material.setText("");
-            ((itemViewHolderStok)holder).txt_stok.setText("");
+            ((itemViewHolderStok)holder).txt_kode.setText("Kode : "+material_stok.getKode());
+            ((itemViewHolderStok)holder).txt_material.setText("Material : "+material_stok.getNama());
+            ((itemViewHolderStok)holder).txt_stok.setText("STOK : "+material_stok.getJml_stok());
 
         }else if(holder instanceof footerViewHolderStok){
 
@@ -118,7 +120,7 @@ public class StokAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             ((footerViewHolderStok)holder).btn_next.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    StokFragment fragment = new StokFragment();
+                    StokFragment fragment = new StokFragment(context);
                     FragmentTransaction fragmentTransaction = fm.beginTransaction();
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     fragmentTransaction.replace(R.id.frame_container, fragment);

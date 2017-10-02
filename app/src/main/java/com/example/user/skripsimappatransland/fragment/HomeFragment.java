@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.user.skripsimappatransland.R;
 import com.example.user.skripsimappatransland.activity.AddMaterialActivity;
 import com.example.user.skripsimappatransland.activity.MaterialInFragmentActivity;
 import com.example.user.skripsimappatransland.activity.MaterialOutFragmentActivity;
 import com.example.user.skripsimappatransland.activity.StokActivity;
+import com.example.user.skripsimappatransland.model.CekConnection;
 
 /**
  * Created by User on 8/21/2017.
@@ -22,6 +24,7 @@ import com.example.user.skripsimappatransland.activity.StokActivity;
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
     ImageView img_material_beli,img_material_pakai,img_material_stok,img_material_add;
+    private CekConnection cc;
 
     public HomeFragment(){
 
@@ -30,6 +33,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        cc = new CekConnection(getContext());
     }
 
     @Nullable
@@ -51,18 +61,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        if(view == img_material_beli){
-            Intent i = new Intent(getContext(), MaterialInFragmentActivity.class);
-            startActivity(i);
-        }else if(view == img_material_pakai){
-            Intent i = new Intent(getContext(), MaterialOutFragmentActivity.class);
-            startActivity(i);
-        }else if(view == img_material_stok){
-            Intent i = new Intent(getContext(), StokActivity.class);
-            startActivity(i);
-        }else if(view == img_material_add){
-            Intent i = new Intent(getContext(), AddMaterialActivity.class);
-            startActivity(i);
+        if(cc.isConnected()){
+            if(view == img_material_beli){
+                Intent i = new Intent(getContext(), MaterialInFragmentActivity.class);
+                startActivity(i);
+            }else if(view == img_material_pakai){
+                Intent i = new Intent(getContext(), MaterialOutFragmentActivity.class);
+                startActivity(i);
+            }else if(view == img_material_stok){
+                Intent i = new Intent(getContext(), StokActivity.class);
+                startActivity(i);
+            }else if(view == img_material_add){
+                Intent i = new Intent(getContext(), AddMaterialActivity.class);
+                startActivity(i);
+            }
+        }else{
+            Toast.makeText(getContext(),"Tidak Ada Internet . . . ",Toast.LENGTH_SHORT).show();
         }
+
     }
 }

@@ -22,7 +22,7 @@ public class StokActivity extends AppCompatActivity {
             MskTerz.datake = 0;
             getSupportFragmentManager().beginTransaction().
                     add(R.id.frame_container,
-                            new StokFragment(),
+                            new StokFragment(this),
                             StokFragment.class.getSimpleName()).commit();
         }
     }

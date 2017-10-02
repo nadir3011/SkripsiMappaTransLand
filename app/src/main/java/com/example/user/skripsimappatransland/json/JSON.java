@@ -2,6 +2,7 @@ package com.example.user.skripsimappatransland.json;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
@@ -89,15 +90,15 @@ public class JSON{
         }
     }
 
-    public void jsonMaterialStok(String jsonString, RecyclerView rv) throws JSONException{
+    public void jsonMaterialStok(String jsonString, RecyclerView rv, FragmentManager fm) throws JSONException{
         JSONObject jsonObject = new JSONObject(jsonString);
         if(jsonObject.getBoolean("error")==false){
-            JSONArray jsonArray = jsonObject.getJSONArray("materialstok");
+            JSONArray jsonArray = jsonObject.getJSONArray("hasil");
             RecyclerView.Adapter rvAdapter;
             List<Material_Stok> materials = new ArrayList<>();
             for(int i = 0; i < jsonArray.length(); i++){
                 Material_Stok material = new Material_Stok();
-                material.setKode(jsonArray.getJSONObject(i).getString("kd_material"));
+                material.setKode(jsonArray.getJSONObject(i).getString("kode"));
                 material.setNama(jsonArray.getJSONObject(i).getString("material"));
                 material.setSatuan(jsonArray.getJSONObject(i).getString("satuan"));
                 material.setHarga(String.valueOf(jsonArray.getJSONObject(i).getDouble("harga")));
@@ -106,10 +107,11 @@ public class JSON{
                 material.setJml_stok(String.valueOf(jsonArray.getJSONObject(i).getInt("stok")));
                 materials.add(material);
             }
-            rvAdapter = new StokAdapter(context,materials);
+            MskTerz.jumlahdata = jsonArray.length();
+            rvAdapter = new StokAdapter(context, fm, materials);
             rv.setAdapter(rvAdapter);
         }else{
-            Toast.makeText(context,"Meesage : "+jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+            Toast.makeText(context,"Message : "+jsonObject.getString("message"),Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -63,7 +63,7 @@ public class RequestSTRING{
         void onSuccess(String result) throws JSONException;
     }
 
-    public void cek_status(final VolleyCallBack callback){
+    public void string_status(final VolleyCallBack callback){
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlnya, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
