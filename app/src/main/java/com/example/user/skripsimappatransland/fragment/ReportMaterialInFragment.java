@@ -33,9 +33,10 @@ public class ReportMaterialInFragment extends Fragment{
     private RecyclerView rv;
     private RecyclerView.LayoutManager rv_lm;
     private RecyclerView.Adapter rvAdapter;
-    private ArrayList<ReportIn> reportIns;
+    private ArrayList<ReportIn> reportIn;
 
-    public ReportMaterialInFragment(){
+    public ReportMaterialInFragment(ArrayList<ReportIn> reportIns){
+        this.reportIn = reportIns;
 
     }
 
@@ -55,6 +56,7 @@ public class ReportMaterialInFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_report_material_in, container, false);
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
+//        getReportIn();
         return view;
 //        return inflater.inflate(R.layout.fragment_report_material_in,container,false);
     }
@@ -66,7 +68,7 @@ public class ReportMaterialInFragment extends Fragment{
         rv_lm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(rv_lm);
 
-        rvAdapter = new ReportInAdapter(getActivity(), reportIns, getFragmentManager());
+        rvAdapter = new ReportInAdapter(getActivity(), reportIn, getFragmentManager());
         rv.setAdapter(rvAdapter);
     }
 
@@ -82,12 +84,12 @@ public class ReportMaterialInFragment extends Fragment{
             @Override
             public void onSuccess(String result) throws JSONException {
                 JSON json = new JSON(getActivity());
-//                json.jsonMaterialStok(result, new JSON.DataMaterial() {
-//                    @Override
-//                    public void onMaterial(ArrayList<Material_Stok> material_stoks) {
-//                        reportIns = material_stoks;
-//                    }
-//                });
+                json.jsonReportIn(result, new JSON.DataReportIn() {
+                    @Override
+                    public void onReport(ArrayList<ReportIn> reportIns) {
+                        reportIns = reportIns;
+                    }
+                });
             }
         });
     }

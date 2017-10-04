@@ -12,7 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.user.skripsimappatransland.R;
+import com.example.user.skripsimappatransland.json.JSON;
+import com.example.user.skripsimappatransland.model.MskTerz;
+import com.example.user.skripsimappatransland.model.ReportIn;
 import com.example.user.skripsimappatransland.model.ViewPagerAdapter;
+import com.example.user.skripsimappatransland.volley.RequestSTRING;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 /**
  * Created by User on 8/21/2017.
@@ -20,16 +28,23 @@ import com.example.user.skripsimappatransland.model.ViewPagerAdapter;
 
 public class ReportFragment extends Fragment{
 
-    public ReportFragment(){
-    }
-
     TabLayout tabLayout;
     ViewPager viewPager;
     FragmentActivity fragmentActivity;
     ViewPagerAdapter viewPagerAdapter;
+
+    private ArrayList<ReportIn> reportIn;
+
+    public ReportFragment(ArrayList<ReportIn> reportIn){
+        this.reportIn = reportIn;
+    }
+
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        getReportIn();
     }
 
     @Override
@@ -44,6 +59,7 @@ public class ReportFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_report,container,false);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         return view;
@@ -51,11 +67,32 @@ public class ReportFragment extends Fragment{
 
     private void setupViewPager(ViewPager viewPager){
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(new ReportMaterialInFragment(), "Material In");
+        viewPagerAdapter.addFragment(new ReportMaterialInFragment(reportIn), "Material In");
         viewPagerAdapter.addFragment(new ReportMaterialOutFragment(), "Material Out");
-//        viewPagerAdapter.notifyDataSetChanged();
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.getAdapter().notifyDataSetChanged();
+    }
+
+    void getReportIn(){
+        RequestSTRING rs = new RequestSTRING(getActivity());
+        rs.setUrlnya(MskTerz.url+"/cekmaterialmasukuser/"+MskTerz.M_apikey);
+        rs.setTitle("Report Material Ku");
+        rs.setMessage("Proses . . . . !");
+        rs.setTagString("MSKTERZ_REPORT");
+        rs.setKeynya(new String[]{"user","status"});
+        rs.setValuenya(new String[] {MskTerz.M_user, "Y"});
+        rs.string_post(new RequestSTRING.VolleyCallBack() {
+            @Override
+            public void onSuccess(String result) throws JSONException {
+                JSON json = new JSON(getActivity());
+                json.jsonReportIn(result, new JSON.DataReportIn() {
+                    @Override
+                    public void onReport(ArrayList<ReportIn> reportIns) {
+                        reportIn = reportIns;
+                    }
+                });
+            }
+        });
     }
 
     @Override

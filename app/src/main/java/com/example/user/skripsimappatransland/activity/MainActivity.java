@@ -1,5 +1,6 @@
 package com.example.user.skripsimappatransland.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -18,8 +19,16 @@ import com.example.user.skripsimappatransland.R;
 import com.example.user.skripsimappatransland.fragment.AkunFragment;
 import com.example.user.skripsimappatransland.fragment.HomeFragment;
 import com.example.user.skripsimappatransland.fragment.ReportFragment;
+import com.example.user.skripsimappatransland.json.JSON;
 import com.example.user.skripsimappatransland.model.BottomNavigationViewHelper;
 import com.example.user.skripsimappatransland.model.CekConnection;
+import com.example.user.skripsimappatransland.model.MskTerz;
+import com.example.user.skripsimappatransland.model.ReportIn;
+import com.example.user.skripsimappatransland.volley.RequestSTRING;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements
         BottomNavigationView.OnNavigationItemSelectedListener{
@@ -29,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements
     private FragmentManager fragmentManager;
     private CekConnection cc;
     private Toolbar toolbar;
+    private Context context;
+
+    private ArrayList<ReportIn> reportIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements
         Intent login = new Intent(this,LoginActivity.class);
         startActivity(login);
 
+        context = this;
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
@@ -70,17 +83,47 @@ public class MainActivity extends AppCompatActivity implements
         switch (item.getItemId()){
             case R.id.bottom_home:
                 fragment = new HomeFragment();
+                final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.mainContainer,fragment).commit();
                 break;
             case R.id.bottom_report:
-                fragment = new ReportFragment();
+                getReportIn();
+//                fragment = new ReportFragment(reportIn);
                 break;
             case R.id.bottom_akun:
                 fragment = new AkunFragment();
+                final FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
+                fragmentTransaction1.replace(R.id.mainContainer,fragment).commit();
                 break;
         }
 
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.mainContainer,fragment).commit();
+//        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.mainContainer,fragment).commit();
         return true;
+    }
+
+    void getReportIn(){
+        RequestSTRING rs = new RequestSTRING(context);
+        rs.setUrlnya(MskTerz.url+"/cekmaterialmasukuser/"+MskTerz.M_apikey);
+        rs.setTitle("Report Material Ku");
+        rs.setMessage("Proses . . . . !");
+        rs.setTagString("MSKTERZ_REPORT");
+        rs.setKeynya(new String[]{"user","status"});
+        rs.setValuenya(new String[] {MskTerz.M_user, "Y"});
+        rs.string_post(new RequestSTRING.VolleyCallBack() {
+            @Override
+            public void onSuccess(String result) throws JSONException {
+                JSON json = new JSON(context);
+                json.jsonReportIn(result, new JSON.DataReportIn() {
+                    @Override
+                    public void onReport(ArrayList<ReportIn> reportIns) {
+                        reportIn = reportIns;
+                        fragment = new ReportFragment(reportIn);
+                        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.mainContainer,fragment).commit();
+                    }
+                });
+            }
+        });
     }
 }
