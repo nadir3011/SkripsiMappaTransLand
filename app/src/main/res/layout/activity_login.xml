@@ -42,6 +42,7 @@
         android:layout_below="@id/img_mappa"
         android:id="@+id/edt_username"/>
     <EditText
+        android:inputType="textPassword"
         android:alpha="0.75"
         android:drawablePadding="16dp"
         android:drawableLeft="@drawable/ic_lock_24dp"

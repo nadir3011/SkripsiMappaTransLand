@@ -66,12 +66,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <EditText
+                        android:inputType="numberSigned"
                         android:id="@+id/edt_trans_jumlah"
                         android:textSize="14dp"
                         android:hint="Jumlah Qty"
                         android:layout_width="90dp"
                         android:layout_height="wrap_content" />
                     <EditText
+                        android:inputType="number"
                         android:id="@+id/edt_trans_harga"
                         android:textSize="14dp"
                         android:hint="Harga Satuan"

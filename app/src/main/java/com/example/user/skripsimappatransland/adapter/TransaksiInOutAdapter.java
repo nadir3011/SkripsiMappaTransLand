@@ -1,7 +1,12 @@
 package com.example.user.skripsimappatransland.adapter;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,7 +20,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.skripsimappatransland.R;
+import com.example.user.skripsimappatransland.fragment.DataMaterialFragment;
+import com.example.user.skripsimappatransland.fragment.MaterialInLanjutFragment;
+import com.example.user.skripsimappatransland.json.JSON;
 import com.example.user.skripsimappatransland.model.Material_InOut;
+import com.example.user.skripsimappatransland.model.Material_Stok;
+import com.example.user.skripsimappatransland.model.MskTerz;
+import com.example.user.skripsimappatransland.volley.RequestSTRING;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +43,63 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private int jumlah;
     private final int TYPE_ITEM = 0;
     private final int TYPE_FOOTER = 1;
-    private List<Material_InOut> material_inOuts;
     private Boolean validasi = Boolean.FALSE;
+
+    private String kodeTransaksi = "";
+    private String kodeInOut = "";
+
+    private String supplier = "";
+    private String keterangan = "";
+    private String team = "";
+
+    private int material_input = 0;
+    private int material_ouput = 1;
+    private int material_apa;
+
+    private FragmentManager fm;
+
+    private ArrayList<Material_Stok> material_stoks;
+    private ArrayList<Material_InOut> material_inOuts = new ArrayList<>();
 //    private OnEditTextChanged onEditTextChanged;
 
-    public TransaksiInOutAdapter(Context context, int jumlah){
+    public TransaksiInOutAdapter(Context context, FragmentManager fm, ArrayList<Material_Stok> material_stoks, ArrayList<Material_InOut> material_inOuts, int jumlah, int material_apa, String supplier){
         super();
         this.context = context;
+        this.fm = fm;
+        this.material_stoks = material_stoks;
         this.jumlah = jumlah;
-        material_inOuts = new ArrayList<>();
+        this.material_apa = material_apa;
+        this.supplier = supplier;
+        this.material_inOuts.clear();
+        this.material_inOuts.addAll(material_inOuts);
+
+        getKodeTransaksiIn(new AutoNumber() {
+            @Override
+            public void onKode(String kode) {
+                kodeTransaksi = kode;
+            }
+        });
+
+    }
+
+    public TransaksiInOutAdapter(Context context, FragmentManager fm, ArrayList<Material_Stok> material_stoks, ArrayList<Material_InOut> material_inOuts, int jumlah, int material_apa, String team, String keterangan){
+        super();
+        this.context = context;
+        this.fm = fm;
+        this.material_stoks = material_stoks;
+        this.jumlah = jumlah;
+        this.material_apa = material_apa;
+        this.team = team;
+        this.keterangan = keterangan;
+        this.material_inOuts = material_inOuts;
+
+        getKodeTransaksiOut(new AutoNumber() {
+            @Override
+            public void onKode(String kode) {
+                kodeTransaksi = kode;
+            }
+        });
+
     }
 
     public int getItemViewType(int position){
@@ -52,10 +113,7 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private Boolean isPositionFooter(int position){
         return position >= jumlah;
     }
-//
-//    public interface OnEditTextChanged {
-//        void onTextChanged(int position, String charSeq);
-//    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -72,29 +130,31 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if(holder instanceof itemViewHolderTransaksi){
-            ((itemViewHolderTransaksi)holder).txt_nomor.setText(String.valueOf(position+1));
-            ((itemViewHolderTransaksi)holder).txt_kode.setText("");
-            ((itemViewHolderTransaksi)holder).txt_material.setText("");
 
-            ((itemViewHolderTransaksi)holder).edt_jumlah.setText("");
-            ((itemViewHolderTransaksi)holder).edt_harga.setText("");
+            final Material_InOut material_inOut = material_inOuts.get(position);
+
+            ((itemViewHolderTransaksi)holder).txt_nomor.setText(String.valueOf(position+1));
+            ((itemViewHolderTransaksi)holder).txt_kode.setText(material_inOut.getKode());
+            ((itemViewHolderTransaksi)holder).txt_material.setText(material_inOut.getMaterial());
+
+            ((itemViewHolderTransaksi)holder).edt_jumlah.setText(material_inOut.getJumlah());
+            ((itemViewHolderTransaksi)holder).edt_harga.setText(material_inOut.getHarga());
             ((itemViewHolderTransaksi)holder).edt_total.setText("");
 
-            final Material_InOut material_inOut = new Material_InOut();
-            material_inOut.setPosition(position);
-            material_inOut.setJumlah("");
-            material_inOut.setHarga("");
-            material_inOut.setKode("");
 
             ((itemViewHolderTransaksi)holder).edt_jumlah.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    material_inOut.setJumlah(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
+                    material_inOuts.get(position).setJumlah(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
+
+//                    material_inOut.setJumlah(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
                 }
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    material_inOut.setJumlah(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
+                    material_inOuts.get(position).setJumlah(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
+
+//                    material_inOut.setJumlah(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
                 }
 
                 @Override
@@ -106,12 +166,16 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ((itemViewHolderTransaksi)holder).edt_harga.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    material_inOut.setHarga(((itemViewHolderTransaksi)holder).edt_harga.getText().toString());
+                    material_inOuts.get(position).setHarga(((itemViewHolderTransaksi)holder).edt_harga.getText().toString());
+
+//                    material_inOut.setHarga(((itemViewHolderTransaksi)holder).edt_harga.getText().toString());
                 }
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    material_inOut.setHarga(((itemViewHolderTransaksi)holder).edt_harga.getText().toString());
+                    material_inOuts.get(position).setHarga(((itemViewHolderTransaksi)holder).edt_harga.getText().toString());
+
+//                    material_inOut.setHarga(((itemViewHolderTransaksi)holder).edt_harga.getText().toString());
                 }
 
                 @Override
@@ -123,12 +187,16 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ((itemViewHolderTransaksi)holder).txt_kode.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    material_inOut.setKode(((itemViewHolderTransaksi)holder).txt_kode.getText().toString());
+                    material_inOuts.get(position).setKode(((itemViewHolderTransaksi)holder).txt_kode.getText().toString());
+
+//                    material_inOut.setKode(((itemViewHolderTransaksi)holder).txt_kode.getText().toString());
                 }
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    material_inOut.setKode(((itemViewHolderTransaksi)holder).txt_kode.getText().toString());
+                    material_inOuts.get(position).setKode(((itemViewHolderTransaksi)holder).txt_kode.getText().toString());
+
+//                    material_inOut.setKode(((itemViewHolderTransaksi)holder).txt_kode.getText().toString());
                 }
 
                 @Override
@@ -137,13 +205,22 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
             });
 
-            material_inOuts.add(material_inOut);
             ((itemViewHolderTransaksi)holder).img_material.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(context, "Pilih Material ke-"+(position+1),Toast.LENGTH_SHORT).show();
-                    ((itemViewHolderTransaksi)holder).txt_kode.setText("MTR-"+(position+1));
-                    ((itemViewHolderTransaksi)holder).txt_material.setText("MaTeRiaL-"+(position+1));
+
+                    DataMaterialFragment fragment = new DataMaterialFragment();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("material", material_stoks);
+                    bundle.putParcelableArrayList("inout", material_inOuts);
+                    bundle.putInt("position", position);
+                    bundle.putInt("transaksi", material_apa);
+                    fragment.setArguments(bundle);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    fragmentTransaction.replace(R.id.frame_container, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 }
             });
 
@@ -151,17 +228,148 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ((footerViewHolderTransaksi)holder).btn_transaksi.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    for(int a = 0; a < jumlah;a++){
-                        Material_InOut material_inOut = (Material_InOut) material_inOuts.get(a);
-                        if(material_inOut.getJumlah().length()==0){
-                            Toast.makeText(context, "Data Jumlah Belum Di Isi...! - "+(material_inOut.getPosition()+1),Toast.LENGTH_SHORT).show();
-                            return ;
-                        }
+                    if(material_apa == material_input){
+                        saveTransaksiIn();
+                    }else if(material_apa == material_ouput){
+                        saveTransaksiOut();
                     }
-                    ((Activity) context).finish();
+
                 }
             });
         }
+    }
+
+
+    void saveTransaksiIn(){
+        getKodeTransaksiIn(new AutoNumber() {
+            @Override
+            public void onKode(String kode) {
+                kodeTransaksi = kode;
+            }
+        });
+
+
+        for(int a = 0; a < jumlah;a++) {
+            Material_InOut material_inOut = (Material_InOut) material_inOuts.get(a);
+            if (material_inOut.getJumlah().length() == 0 || material_inOut.getHarga().length() == 0 || material_inOut.getKode().length() == 0) {
+                Toast.makeText(context, "Data Jumlah Belum Di Isi...! - " + (material_inOut.getPosition() + 1), Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        for( int a = 0; a < jumlah;a++){
+            Material_InOut material_inOut = (Material_InOut) material_inOuts.get(a);
+
+            final int berhasil = a;
+            RequestSTRING rs = new RequestSTRING(context);
+            rs.setUrlnya(MskTerz.url+"/materialmasuk/"+MskTerz.M_apikey);
+            rs.setTitle("Transaksi");
+            rs.setMessage("Proses . . . . !");
+            rs.setTagString("MSKTERZ_INOUT");
+            rs.setKeynya(new String[]{"transaksi", "material", "user", "supplier", "jumlah", "harga"});
+            rs.setValuenya(new String[]{kodeTransaksi, "MTR-001",  MskTerz.M_user, supplier, material_inOut.getJumlah(), material_inOut.getHarga()});
+            rs.string_post(new RequestSTRING.VolleyCallBack() {
+                @Override
+                public void onSuccess(String result) throws JSONException {
+                    JSON json = new JSON(context);
+                    if(json.jsonSukses(result)){
+                        if(berhasil == jumlah-1){
+                            ((Activity) context).finish();
+                        }
+                    }else{
+                        Toast.makeText(context,"Ada yang Salah...!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        }
+    }
+
+
+    void saveTransaksiOut(){
+        getKodeTransaksiOut(new AutoNumber() {
+            @Override
+            public void onKode(String kode) {
+                kodeTransaksi = kode;
+            }
+        });
+
+        for(int a = 0; a < jumlah;a++) {
+            Material_InOut material_inOut = (Material_InOut) material_inOuts.get(a);
+            if (material_inOut.getJumlah().length() == 0 || material_inOut.getHarga().length() == 0 || material_inOut.getKode().length() == 0) {
+                Toast.makeText(context, "Data Jumlah Belum Di Isi...! - " + (material_inOut.getPosition() + 1), Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        for(int a = 0; a < jumlah;a++){
+            Material_InOut material_inOut = (Material_InOut) material_inOuts.get(a);
+
+            final int berhasil = a;
+
+            RequestSTRING rs = new RequestSTRING(context);
+            rs.setUrlnya(MskTerz.url+"/materialkeluar/"+MskTerz.M_apikey);
+            rs.setTitle("Transaksi");
+            rs.setMessage("Proses . . . . !");
+            rs.setTagString("MSKTERZ_INOUT");
+            rs.setKeynya(new String[]{"transaksi", "material", "user", "tim", "jumlah", "harga", "ket"});
+            rs.setValuenya(new String[]{kodeTransaksi, "MTR-001",  MskTerz.M_user, team, material_inOut.getJumlah(), material_inOut.getHarga(), keterangan});
+            rs.string_post(new RequestSTRING.VolleyCallBack() {
+                @Override
+                public void onSuccess(String result) throws JSONException {
+                    JSON json = new JSON(context);
+                    if(json.jsonSukses(result)){
+                        if(berhasil == jumlah-1){
+                            ((Activity) context).finish();
+                        }
+                    }else{
+                        Toast.makeText(context,"Ada yang Salah...!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        }
+    }
+
+    public interface AutoNumber{
+        void onKode(String kode);
+    }
+
+    void getKodeTransaksiIn(final AutoNumber autoNumber){
+        RequestSTRING rs = new RequestSTRING(context);
+        rs.setUrlnya(MskTerz.url+"/autonumber"+"/"+MskTerz.M_apikey);
+        rs.setTitle("Cari Kode");
+        rs.setMessage("Proses . . . . !");
+        rs.setTagString("MSKTERZ_KODE");
+        rs.setKeynya(new String[]{"table","kolom","lebar","awalan","user"});
+        rs.setValuenya(new String[]{"mskter_material_masuk", "kd_transaksi_in", "3", "INTRA-", MskTerz.M_user});
+        rs.string_status(new RequestSTRING.VolleyCallBack() {
+            @Override
+            public void onSuccess(String result) throws JSONException {
+                String kode="";
+                JSON json = new JSON(context);
+                kode = json.jsonKode(result);
+                autoNumber.onKode(kode);
+            }
+        });
+    }
+    void getKodeTransaksiOut(final AutoNumber autoNumber){
+        RequestSTRING rs = new RequestSTRING(context);
+        rs.setUrlnya(MskTerz.url+"/autonumber"+"/"+MskTerz.M_apikey);
+        rs.setTitle("Cari Kode");
+        rs.setMessage("Proses . . . . !");
+        rs.setTagString("MSKTERZ_KODE");
+        rs.setKeynya(new String[]{"table","kolom","lebar","awalan","user"});
+        rs.setValuenya(new String[]{"mskter_material_out", "kd_transaksi_out", "3", "OUTTRA-", MskTerz.M_user});
+        rs.string_status(new RequestSTRING.VolleyCallBack() {
+            @Override
+            public void onSuccess(String result) throws JSONException {
+                String kode="";
+                JSON json = new JSON(context);
+                kode = json.jsonKode(result);
+                autoNumber.onKode(kode);
+            }
+        });
     }
 
     @Override

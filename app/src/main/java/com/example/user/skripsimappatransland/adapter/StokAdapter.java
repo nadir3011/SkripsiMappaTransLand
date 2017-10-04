@@ -14,6 +14,7 @@ import com.example.user.skripsimappatransland.fragment.StokFragment;
 import com.example.user.skripsimappatransland.model.Material_Stok;
 import com.example.user.skripsimappatransland.model.MskTerz;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,17 +25,10 @@ public class StokAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final int TYPE_ITEM = 0;
     private final int TYPE_FOOTER = 1;
     private Context context;
-    private List<Material_Stok> material_stoks;
+    private ArrayList<Material_Stok> material_stoks;
     private FragmentManager fm;
 
-    public StokAdapter(Context context, List<Material_Stok> material_stoks){
-        super();
-        this.context = context;
-        this.material_stoks = material_stoks;
-    }
-
-
-    public StokAdapter(Context context, FragmentManager fm, List<Material_Stok> material_stoks){
+    public StokAdapter(Context context, FragmentManager fm, ArrayList<Material_Stok> material_stoks){
         super();
         this.context = context;
         this.fm = fm;
@@ -58,22 +52,6 @@ public class StokAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
 
 
-//    @Override
-//    public viewHolderStok onCreateViewHolder(ViewGroup parent, int viewType) {
-//        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_stok, parent, false);
-//        viewHolderStok vh = new viewHolderStok(v);
-//        return vh;
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(viewHolderStok holder, int position) {
-//        final Material_Stok material_stok = material_stoks.get(position);
-//        holder.txt_nomor.setText(String.valueOf(position+1));
-//        holder.txt_kode.setText(material_stok.getKode());
-//        holder.txt_material.setText(material_stok.getNama());
-//        holder.txt_stok.setText(material_stok.getJml_stok());
-//    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == TYPE_ITEM){
@@ -90,10 +68,6 @@ public class StokAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof itemViewHolderStok){
             final Material_Stok material_stok = material_stoks.get(position);
-//        holder.txt_nomor.setText(String.valueOf(position+1));
-//        holder.txt_kode.setText(material_stok.getKode());
-//        holder.txt_material.setText(material_stok.getNama());
-//        holder.txt_stok.setText(material_stok.getJml_stok());
             int sekarang = (MskTerz.datake*MskTerz.banyakdata)+(position)+1;
             ((itemViewHolderStok)holder).txt_nomor.setText(String.valueOf(sekarang));
             ((itemViewHolderStok)holder).txt_kode.setText("Kode : "+material_stok.getKode());

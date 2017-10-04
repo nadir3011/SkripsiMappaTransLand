@@ -1,13 +1,20 @@
 package com.example.user.skripsimappatransland.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by User on 8/8/2017.
  */
 
-public class Material_InOut {
+public class Material_InOut implements Parcelable {
 
-    String kode, jumlah, harga;
+    String kode, jumlah, harga, material;
     int position;
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
 
     public void setPosition(int position) {
         this.position = position;
@@ -25,6 +32,10 @@ public class Material_InOut {
         this.kode = kode;
     }
 
+    public String getMaterial() {
+        return material;
+    }
+
     public int getPosition() {
         return position;
     }
@@ -40,5 +51,42 @@ public class Material_InOut {
     public String getKode() {
         return kode;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.kode);
+        dest.writeString(this.jumlah);
+        dest.writeString(this.harga);
+        dest.writeString(this.material);
+        dest.writeInt(this.position);
+    }
+
+    public Material_InOut() {
+    }
+
+    protected Material_InOut(Parcel in) {
+        this.kode = in.readString();
+        this.jumlah = in.readString();
+        this.harga = in.readString();
+        this.material = in.readString();
+        this.position = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Material_InOut> CREATOR = new Parcelable.Creator<Material_InOut>() {
+        @Override
+        public Material_InOut createFromParcel(Parcel source) {
+            return new Material_InOut(source);
+        }
+
+        @Override
+        public Material_InOut[] newArray(int size) {
+            return new Material_InOut[size];
+        }
+    };
 }
 

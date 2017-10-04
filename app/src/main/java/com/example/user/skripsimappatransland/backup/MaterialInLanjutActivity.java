@@ -44,8 +44,8 @@ public class MaterialInLanjutActivity extends AppCompatActivity {
         rv.setHasFixedSize(true);
         rv_lm = new LinearLayoutManager(this);
         rv.setLayoutManager(rv_lm);
-        rvAdapter = new TransaksiInOutAdapter(this,jumlah);
-        rv.setAdapter(rvAdapter);
+//        rvAdapter = new TransaksiInOutAdapter(this,jumlah);
+//        rv.setAdapter(rvAdapter);
 
     }
 

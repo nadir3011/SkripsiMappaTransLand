@@ -26,6 +26,8 @@ public class RequestSTRING{
     private String urlnya,title,message,tagString;
     private String [] keynya;
     private String [] valuenya;
+    private int jumlah = 0;
+    private int data = 0;
     public RequestSTRING(){
 
     }
@@ -58,6 +60,13 @@ public class RequestSTRING{
         this.valuenya = valuenya;
     }
 
+    public void setData(int data) {
+        this.data = data;
+    }
+
+    public void setJumlah(int jumlah) {
+        this.jumlah = jumlah;
+    }
 
     public interface VolleyCallBack{
         void onSuccess(String result) throws JSONException;
@@ -104,9 +113,11 @@ public class RequestSTRING{
                 try {
                     Thread.sleep(7000);
                 }catch (Exception e){
+                    progressDialog.dismiss();
                     errornya(context,e.getMessage());
                 }
                 progressDialog.dismiss();
+//                AppController.getInstance().cancelPendingRequests(tagString);
             }
         }).start();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, urlnya, new Response.Listener<String>() {
@@ -252,9 +263,9 @@ public class RequestSTRING{
     }
 
     public static void errornya(Context context, String s){
-        Intent i = new Intent(context,MainActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        context.startActivity(i);
+//        Intent i = new Intent(context,MainActivity.class);
+//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        context.startActivity(i);
         Toast.makeText(context,"Error "+s,Toast.LENGTH_LONG).show();
     }
 }

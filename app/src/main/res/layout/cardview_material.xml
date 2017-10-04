@@ -27,7 +27,7 @@
             <TextView
                 android:id="@+id/txt_material_kode"
                 android:layout_marginTop="2dp"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:layout_marginRight="46dp"
 
                 android:layout_marginLeft="6dp"
@@ -37,7 +37,7 @@
                 android:text="Kode Material"/>
             <TextView
                 android:id="@+id/txt_material_nama"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:textStyle="italic"
                 android:layout_marginRight="46dp"
 
@@ -46,6 +46,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nama Material/Satuan"/>
+            <TextView
+                android:id="@+id/txt_material_stok"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                android:layout_marginRight="46dp"
+
+                android:layout_below="@id/txt_material_nama"
+                android:layout_marginTop="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Stok"/>
 
             <ImageView
                 android:id="@+id/img_material"

@@ -13,19 +13,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.user.skripsimappatransland.R;
 import com.example.user.skripsimappatransland.activity.MaterialOutFragmentActivity;
+import com.example.user.skripsimappatransland.json.JSON;
+import com.example.user.skripsimappatransland.model.Material_Stok;
+import com.example.user.skripsimappatransland.model.MskTerz;
+import com.example.user.skripsimappatransland.volley.RequestSTRING;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 /**
  * Created by User on 9/6/2017.
  */
 
-public class MaterialOutFragment extends Fragment {
+public class MaterialOutFragment extends Fragment implements View.OnClickListener{
     private EditText edt_team,edt_transaction,edt_information;
     private Button btn_lanjut_out;
+    private ImageView img_kurang, img_tambah;
     private Toolbar toolbar;
     private ActionBar actionBar;
+
+    private ArrayList<Material_Stok> material_stok;
     public MaterialOutFragment(){
 
     }
@@ -37,10 +49,38 @@ public class MaterialOutFragment extends Fragment {
         edt_team = (EditText) view.findViewById(R.id.edt_team);
         edt_transaction = (EditText) view.findViewById(R.id.edt_transaction);
         edt_information = (EditText) view.findViewById(R.id.edt_information);
+        edt_transaction.setEnabled(false);
+
         btn_lanjut_out = (Button) view.findViewById(R.id.btn_lanjut_out);
+        img_kurang = (ImageView) view.findViewById(R.id.img_kurang);
+        img_tambah = (ImageView) view.findViewById(R.id.img_tambah);
         toolbar = (Toolbar) view.findViewById(R.id.toolbar2);
+
+        getDataMaterial();
         setHasOptionsMenu(true);
         return view;
+    }
+
+    void getDataMaterial(){
+        RequestSTRING rs = new RequestSTRING(getActivity());
+        rs.setUrlnya(MskTerz.url+"/stokya/"+MskTerz.M_apikey);
+        rs.setTitle("Data Material");
+        rs.setMessage("Proses . . . . !");
+        rs.setTagString("MSKTERZ_STOK");
+        rs.setKeynya(new String[]{"user"});
+        rs.setValuenya(new String[] {MskTerz.M_user});
+        rs.string_post(new RequestSTRING.VolleyCallBack() {
+            @Override
+            public void onSuccess(String result) throws JSONException {
+                JSON json = new JSON(getActivity());
+                json.jsonMaterialStok(result, new JSON.DataMaterial() {
+                    @Override
+                    public void onMaterial(ArrayList<Material_Stok> material_stoks) {
+                        material_stok = material_stoks;
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -53,40 +93,13 @@ public class MaterialOutFragment extends Fragment {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
 
-        btn_lanjut_out.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String team = edt_team.getText().toString();
-                String transaksi = edt_transaction.getText().toString();
-                String keterangan = edt_information.getText().toString();
-                boolean cekvalue = true;
-                if(team.length()<=4){
-                    edt_team.setError("Minimal 5 karakter");
-                    cekvalue = false;
-                }
-                if(transaksi.length()==0){
-                    edt_transaction.setError("Harap isi jumlah transaksi");
-                    cekvalue = false;
-                }
-                if(keterangan.length()<=4){
-                    edt_information.setError("Minimal 4 karakter");
-                    cekvalue = false;
-                }
-                if(cekvalue){
-                    MaterialOutLanjutFragment fragment = new MaterialOutLanjutFragment();
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("team", team);
-                    bundle.putString("transaction", transaksi);
-                    bundle.putString("information", keterangan);
-                    fragment.setArguments(bundle);
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                    fragmentTransaction.replace(R.id.frame_container, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                }
-            }
-        });
+        edt_team.setText("Dipanegara");
+        edt_transaction.setText("1");
+        edt_information.setText("BTN Antara Blok A1-A10");
+
+        btn_lanjut_out.setOnClickListener(this);
+        img_tambah.setOnClickListener(this);
+        img_kurang.setOnClickListener(this);
     }
 
     @Override
@@ -95,5 +108,52 @@ public class MaterialOutFragment extends Fragment {
             getActivity().finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+        String team = edt_team.getText().toString();
+        String transaksi = edt_transaction.getText().toString();
+        String keterangan = edt_information.getText().toString();
+        int nilai = Integer.parseInt(transaksi);
+        if(view == btn_lanjut_out){
+            boolean cekvalue = true;
+            if(team.length()<=4){
+                edt_team.setError("Minimal 5 karakter");
+                cekvalue = false;
+            }
+            if(transaksi.length()==0){
+                edt_transaction.setError("Harap isi jumlah transaksi");
+                cekvalue = false;
+            }
+            if(keterangan.length()<=4){
+                edt_information.setError("Minimal 4 karakter");
+                cekvalue = false;
+            }
+            if(cekvalue){
+                MaterialOutLanjutFragment fragment = new MaterialOutLanjutFragment();
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putString("team", team);
+                bundle.putString("transaction", transaksi);
+                bundle.putString("information", keterangan);
+                bundle.putParcelableArrayList("material", material_stok);
+                fragment.setArguments(bundle);
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                fragmentTransaction.replace(R.id.frame_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        }else if(view == img_tambah){
+            if(material_stok.size() > nilai){
+                nilai += 1;
+                edt_transaction.setText(String.valueOf(nilai));
+            }
+        }else if(view == img_kurang){
+            if(nilai>1){
+                nilai -= 1;
+                edt_transaction.setText(String.valueOf(nilai));
+            }
+        }
     }
 }

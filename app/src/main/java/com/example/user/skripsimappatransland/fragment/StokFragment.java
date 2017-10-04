@@ -19,10 +19,14 @@ import com.example.user.skripsimappatransland.R;
 import com.example.user.skripsimappatransland.activity.StokActivity;
 import com.example.user.skripsimappatransland.adapter.StokAdapter;
 import com.example.user.skripsimappatransland.json.JSON;
+import com.example.user.skripsimappatransland.model.Material_Stok;
 import com.example.user.skripsimappatransland.model.MskTerz;
 import com.example.user.skripsimappatransland.volley.RequestSTRING;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -92,7 +96,14 @@ public class StokFragment extends Fragment {
             @Override
             public void onSuccess(String result) throws JSONException {
                 JSON json = new JSON(context);
-                json.jsonMaterialStok(result, rv, fm);
+                json.jsonMaterialStok(result, new JSON.DataMaterial() {
+                    @Override
+                    public void onMaterial(ArrayList<Material_Stok> material_stoks) {
+                        MskTerz.jumlahdata = material_stoks.size();
+                        rvAdapter = new StokAdapter(context,fm, material_stoks);
+                        rv.setAdapter(rvAdapter);
+                    }
+                });
             }
         });
     }
