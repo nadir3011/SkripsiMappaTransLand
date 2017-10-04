@@ -14,10 +14,9 @@ import android.widget.Toast;
 
 import com.example.user.skripsimappatransland.R;
 import com.example.user.skripsimappatransland.fragment.DataMaterialFragment;
-import com.example.user.skripsimappatransland.model.Material_InOut;
-import com.example.user.skripsimappatransland.model.Material_Stok;
 import com.example.user.skripsimappatransland.model.MskTerz;
 import com.example.user.skripsimappatransland.model.ReportIn;
+import com.example.user.skripsimappatransland.model.ReportOut;
 
 import java.util.ArrayList;
 
@@ -25,19 +24,19 @@ import java.util.ArrayList;
  * Created by User on 8/8/2017.
  */
 
-public class ReportInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ReportOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private final int TYPE_ITEM = 0;
     private final int TYPE_FOOTER = 1;
     private Context context;
-    private ArrayList<ReportIn> reportIns;
+    private ArrayList<ReportOut> reportOuts;
     private FragmentManager fm;
 
 
-    public ReportInAdapter(Context context, ArrayList<ReportIn> reportIns, FragmentManager fm){
+    public ReportOutAdapter(Context context, ArrayList<ReportOut> reportOuts, FragmentManager fm){
         super();
         this.context = context;
-        this.reportIns = reportIns;
+        this.reportOuts = reportOuts;
         this.fm = fm;
     }
 
@@ -49,20 +48,20 @@ public class ReportInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private Boolean isPositionFooter(int position){
-        if(reportIns.size()==position){
+        if(reportOuts.size()==position){
             return true;
         }
-        return position >= reportIns.size()-1;
+        return position >= reportOuts.size()-1;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == TYPE_ITEM){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_report, parent, false);
-            return new ReportInAdapter.itemViewHolderMaterial(view);
+            return new ReportOutAdapter.itemViewHolderMaterial(view);
         }else if(viewType == TYPE_FOOTER){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer_button_stok, parent, false);
-            return new ReportInAdapter.footerViewHolderMaterial(view);
+            return new ReportOutAdapter.footerViewHolderMaterial(view);
         }
         throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
     }
@@ -71,13 +70,13 @@ public class ReportInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof itemViewHolderMaterial){
             try {
-                final ReportIn reportIn = reportIns.get(position);
+                final ReportOut reportOut = reportOuts.get(position);
                 final int sekarang = (position)+1;
                 ((itemViewHolderMaterial)holder).txt_nomor.setText(String.valueOf(sekarang));
-                ((itemViewHolderMaterial)holder).txt_material.setText(reportIn.getMaterial());
-                ((itemViewHolderMaterial)holder).txt_tanggal.setText(reportIn.getTanggal() + "("+reportIn.getSupplier()+")");
-                double total = Double.parseDouble(reportIn.getJumlah())*Double.parseDouble(reportIn.getHarga());
-                ((itemViewHolderMaterial)holder).txt_jumlah.setText("Qty => "+reportIn.getJumlah()+"@Rp. "+reportIn.getHarga()+" (Rp. "+total+")");
+                ((itemViewHolderMaterial)holder).txt_material.setText(reportOut.getMaterial());
+                ((itemViewHolderMaterial)holder).txt_tanggal.setText(reportOut.getTanggal() + "("+reportOut.getTim()+")");
+                double total = Double.parseDouble(reportOut.getJumlah())*Double.parseDouble(reportOut.getHarga());
+                ((itemViewHolderMaterial)holder).txt_jumlah.setText("Qty => "+reportOut.getJumlah()+"@Rp. "+reportOut.getHarga()+" (Rp. "+total+")\n"+reportOut.getBlok());
             }catch (Exception e){
                 Toast.makeText(context, "Error : "+e.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -124,7 +123,7 @@ public class ReportInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return reportIns.size();
+        return reportOuts.size();
 //        int asli = MskTerz.jumlahdatamaterial / MskTerz.banyakdata;
 //        if(MskTerz.jumlahdatamaterial < MskTerz.banyakdata){
 //            return MskTerz.jumlahdatamaterial;

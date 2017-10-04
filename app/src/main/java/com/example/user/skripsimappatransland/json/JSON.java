@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.example.user.skripsimappatransland.model.Material_Stok;
 import com.example.user.skripsimappatransland.model.MskTerz;
 import com.example.user.skripsimappatransland.model.ReportIn;
+import com.example.user.skripsimappatransland.model.ReportOut;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +36,10 @@ public class JSON{
             MskTerz.M_nama = jsonObject.getString("nama");
             MskTerz.M_user = jsonObject.getString("username");
             MskTerz.M_apikey = jsonObject.getString("apikey");
+            MskTerz.M_alamat = jsonObject.getString("alamat");
+            MskTerz.M_tmp_lahir = jsonObject.getString("tempat_lahir");
+            MskTerz.M_tgl_lahir = jsonObject.getString("tanggal_lahir");
+            MskTerz.M_kontak = jsonObject.getString("kontak");
             return true;
         }else{
             Toast.makeText(context, "Pastikan username and password benar",Toast.LENGTH_LONG).show();
@@ -102,12 +107,37 @@ public class JSON{
         }
     }
 
+    public void jsonReportOut(String jsonString, DataReportOut dataReportOut) throws JSONException{
+        JSONObject jsonObject = new JSONObject(jsonString);
+        if(jsonObject.getBoolean("error")==false){
+            JSONArray jsonArray = jsonObject.getJSONArray("hasil");
+            ArrayList<ReportOut> reportOuts = new ArrayList<>();
+            for(int i = 0; i < jsonArray.length(); i++){
+                ReportOut reportOut = new ReportOut();
+                reportOut.setMaterial(jsonArray.getJSONObject(i).getString("material"));
+                reportOut.setTim(jsonArray.getJSONObject(i).getString("tim"));
+                reportOut.setTanggal(jsonArray.getJSONObject(i).getString("tanggal"));
+                reportOut.setJumlah(jsonArray.getJSONObject(i).getString("jumlah"));
+                reportOut.setHarga(jsonArray.getJSONObject(i).getString("harga"));
+                reportOut.setBlok(jsonArray.getJSONObject(i).getString("keterangan"));
+                reportOuts.add(reportOut);
+            }
+            dataReportOut.onReport(reportOuts);
+        }else{
+            Toast.makeText(context,"Message : "+jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+        }
+    }
+
     public interface DataMaterial{
         void onMaterial(ArrayList<Material_Stok> material_stoks);
     }
 
     public interface DataReportIn{
         void onReport(ArrayList<ReportIn> reportIns);
+    }
+
+    public interface DataReportOut{
+        void onReport(ArrayList<ReportOut> reportOuts);
     }
 
 //    public void jsonDataMaterialStok(String jsonString, DataMaterial dataMaterial) throws JSONException{

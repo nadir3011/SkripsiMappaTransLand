@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class ReportMaterialInFragment extends Fragment{
 
-    FragmentActivity fragmentActivity;
+    private FragmentActivity fragmentActivity;
     private RecyclerView rv;
     private RecyclerView.LayoutManager rv_lm;
     private RecyclerView.Adapter rvAdapter;
@@ -56,9 +56,7 @@ public class ReportMaterialInFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_report_material_in, container, false);
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
-//        getReportIn();
         return view;
-//        return inflater.inflate(R.layout.fragment_report_material_in,container,false);
     }
 
     @Override
@@ -72,26 +70,5 @@ public class ReportMaterialInFragment extends Fragment{
         rv.setAdapter(rvAdapter);
     }
 
-    void getReportIn(){
-        RequestSTRING rs = new RequestSTRING(getActivity());
-        rs.setUrlnya(MskTerz.url+"/cekmaterialmasukuser/"+MskTerz.M_apikey);
-        rs.setTitle("Report Material Ku");
-        rs.setMessage("Proses . . . . !");
-        rs.setTagString("MSKTERZ_REPORT");
-        rs.setKeynya(new String[]{"user","status"});
-        rs.setValuenya(new String[] {MskTerz.M_user, "Y"});
-        rs.string_post(new RequestSTRING.VolleyCallBack() {
-            @Override
-            public void onSuccess(String result) throws JSONException {
-                JSON json = new JSON(getActivity());
-                json.jsonReportIn(result, new JSON.DataReportIn() {
-                    @Override
-                    public void onReport(ArrayList<ReportIn> reportIns) {
-                        reportIns = reportIns;
-                    }
-                });
-            }
-        });
-    }
 
 }

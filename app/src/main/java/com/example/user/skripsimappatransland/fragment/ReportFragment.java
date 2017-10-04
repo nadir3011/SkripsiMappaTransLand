@@ -15,6 +15,7 @@ import com.example.user.skripsimappatransland.R;
 import com.example.user.skripsimappatransland.json.JSON;
 import com.example.user.skripsimappatransland.model.MskTerz;
 import com.example.user.skripsimappatransland.model.ReportIn;
+import com.example.user.skripsimappatransland.model.ReportOut;
 import com.example.user.skripsimappatransland.model.ViewPagerAdapter;
 import com.example.user.skripsimappatransland.volley.RequestSTRING;
 
@@ -34,11 +35,12 @@ public class ReportFragment extends Fragment{
     ViewPagerAdapter viewPagerAdapter;
 
     private ArrayList<ReportIn> reportIn;
+    private ArrayList<ReportOut> reportOut;
 
-    public ReportFragment(ArrayList<ReportIn> reportIn){
+    public ReportFragment(ArrayList<ReportIn> reportIn, ArrayList<ReportOut> reportOut){
         this.reportIn = reportIn;
+        this.reportOut = reportOut;
     }
-
 
 
     @Override
@@ -68,32 +70,11 @@ public class ReportFragment extends Fragment{
     private void setupViewPager(ViewPager viewPager){
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.addFragment(new ReportMaterialInFragment(reportIn), "Material In");
-        viewPagerAdapter.addFragment(new ReportMaterialOutFragment(), "Material Out");
+        viewPagerAdapter.addFragment(new ReportMaterialOutFragment(reportOut), "Material Out");
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.getAdapter().notifyDataSetChanged();
     }
 
-    void getReportIn(){
-        RequestSTRING rs = new RequestSTRING(getActivity());
-        rs.setUrlnya(MskTerz.url+"/cekmaterialmasukuser/"+MskTerz.M_apikey);
-        rs.setTitle("Report Material Ku");
-        rs.setMessage("Proses . . . . !");
-        rs.setTagString("MSKTERZ_REPORT");
-        rs.setKeynya(new String[]{"user","status"});
-        rs.setValuenya(new String[] {MskTerz.M_user, "Y"});
-        rs.string_post(new RequestSTRING.VolleyCallBack() {
-            @Override
-            public void onSuccess(String result) throws JSONException {
-                JSON json = new JSON(getActivity());
-                json.jsonReportIn(result, new JSON.DataReportIn() {
-                    @Override
-                    public void onReport(ArrayList<ReportIn> reportIns) {
-                        reportIn = reportIns;
-                    }
-                });
-            }
-        });
-    }
 
     @Override
     public void onResume() {

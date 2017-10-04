@@ -24,6 +24,7 @@ import com.example.user.skripsimappatransland.model.BottomNavigationViewHelper;
 import com.example.user.skripsimappatransland.model.CekConnection;
 import com.example.user.skripsimappatransland.model.MskTerz;
 import com.example.user.skripsimappatransland.model.ReportIn;
+import com.example.user.skripsimappatransland.model.ReportOut;
 import com.example.user.skripsimappatransland.volley.RequestSTRING;
 
 import org.json.JSONException;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements
     private Context context;
 
     private ArrayList<ReportIn> reportIn;
+    private ArrayList<ReportOut> reportOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.bottom_report:
                 getReportIn();
+                getReportOut();
 //                fragment = new ReportFragment(reportIn);
                 break;
             case R.id.bottom_akun:
@@ -118,7 +121,32 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onReport(ArrayList<ReportIn> reportIns) {
                         reportIn = reportIns;
-                        fragment = new ReportFragment(reportIn);
+//                        fragment = new ReportFragment(reportIn,reportOut);
+//                        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                        fragmentTransaction.replace(R.id.mainContainer,fragment).commit();
+                    }
+                });
+            }
+        });
+    }
+
+    void getReportOut(){
+        RequestSTRING rs = new RequestSTRING(context);
+        rs.setUrlnya(MskTerz.url+"/cekmaterialkeluaruser/"+MskTerz.M_apikey);
+        rs.setTitle("Report Material Ku");
+        rs.setMessage("Proses . . . . !");
+        rs.setTagString("MSKTERZ_REPORT");
+        rs.setKeynya(new String[]{"user","status"});
+        rs.setValuenya(new String[] {MskTerz.M_user, "Y"});
+        rs.string_post(new RequestSTRING.VolleyCallBack() {
+            @Override
+            public void onSuccess(String result) throws JSONException {
+                JSON json = new JSON(context);
+                json.jsonReportOut(result, new JSON.DataReportOut() {
+                    @Override
+                    public void onReport(ArrayList<ReportOut> reportOuts) {
+                        reportOut = reportOuts;
+                        fragment = new ReportFragment(reportIn,reportOut);
                         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.mainContainer,fragment).commit();
                     }
