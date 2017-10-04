@@ -56,7 +56,6 @@ public class MaterialOutLanjutFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_transaction, container, false);
         toolbar = (Toolbar) view.findViewById(R.id.toolbar2);
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
-//        btn_transaction = (Button) view.findViewById(R.id.btn_transaction);
         Bundle bundle=getArguments();
         team = String.valueOf(bundle.getString("team"));
         keterangan = String.valueOf(bundle.getString("information"));
@@ -97,13 +96,6 @@ public class MaterialOutLanjutFragment extends Fragment {
         rv.setLayoutManager(rv_lm);
         rvAdapter = new TransaksiInOutAdapter(getActivity(), getFragmentManager(), material_stok, material_inOuts, jumlah, 1, team, keterangan);
         rv.setAdapter(rvAdapter);
-
-//        btn_transaction.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                getActivity().finish();
-//            }
-//        });
     }
 
     @Override

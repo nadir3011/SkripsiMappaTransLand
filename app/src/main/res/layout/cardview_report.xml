@@ -17,7 +17,7 @@
             <TextView
                 android:gravity="center"
                 android:background="@drawable/border_page"
-                android:id="@+id/txt_stok_id"
+                android:id="@+id/txt_report_id"
                 android:text="99"
                 android:textColor="@color/colorWhite"
                 android:layout_width="26dp"
@@ -30,7 +30,7 @@
                 android:layout_marginRight="46dp"
 
                 android:layout_marginLeft="6dp"
-                android:layout_toEndOf="@id/txt_stok_id"
+                android:layout_toEndOf="@id/txt_report_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Material"/>
