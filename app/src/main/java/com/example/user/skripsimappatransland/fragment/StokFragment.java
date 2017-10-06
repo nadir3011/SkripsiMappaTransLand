@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.user.skripsimappatransland.R;
 import com.example.user.skripsimappatransland.activity.StokActivity;
@@ -42,6 +43,7 @@ public class StokFragment extends Fragment {
     private ActionBar actionBar;
     private Context context;
     private FragmentManager fm;
+    private ArrayList<Material_Stok> material_stok;
 
     public StokFragment(Context context){
         this.context = context;
@@ -53,6 +55,7 @@ public class StokFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_transaction, container,false);
         toolbar = (Toolbar) view.findViewById(R.id.toolbar2);
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
+        material_stok = getArguments().getParcelableArrayList("stok");
         setHasOptionsMenu(true);
         return view;
     }
@@ -72,7 +75,20 @@ public class StokFragment extends Fragment {
         rv_lm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(rv_lm);
         fm = getFragmentManager();
-        getData();
+
+        rvAdapter = new StokAdapter(context,fm, material_stok);
+        rv.setAdapter(rvAdapter);
+//        if(MskTerz.cekstok){
+////            Toast.makeText(context,"Data Ke : "+MskTerz.datake,Toast.LENGTH_LONG).show();
+//            rvAdapter = new StokAdapter(context,fm, material_stok);
+//            rv.setAdapter(rvAdapter);
+//        }
+//        else{
+////            Toast.makeText(context,"Data Ke : "+MskTerz.datake,Toast.LENGTH_LONG).show();
+//            rvAdapter = new StokAdapter(context,fm, material_stok);
+//            rv.setAdapter(rvAdapter);
+//        }
+//        MskTerz.cekstok = false;
 //        if(MskTerz.datake == 0){
 //            rvAdapter = new StokAdapter(getActivity(), getFragmentManager());
 //            rv.setAdapter(rvAdapter);
@@ -84,46 +100,11 @@ public class StokFragment extends Fragment {
 
     }
 
-    void getData(){
-        RequestSTRING rs = new RequestSTRING(context);
-        rs.setUrlnya(MskTerz.url+"/stokya/"+MskTerz.M_apikey);
-        rs.setTitle("Stok Material");
-        rs.setMessage("Proses . . . . !");
-        rs.setTagString("MSKTERZ_STOK");
-        rs.setKeynya(new String[]{"user"});
-        rs.setValuenya(new String[] {MskTerz.M_user});
-        rs.string_post(new RequestSTRING.VolleyCallBack() {
-            @Override
-            public void onSuccess(String result) throws JSONException {
-                JSON json = new JSON(context);
-                json.jsonMaterialStok(result, new JSON.DataMaterial() {
-                    @Override
-                    public void onMaterial(ArrayList<Material_Stok> material_stoks) {
-                        MskTerz.jumlahdata = material_stoks.size();
-                        rvAdapter = new StokAdapter(context,fm, material_stoks);
-                        rv.setAdapter(rvAdapter);
-                    }
-                });
-            }
-        });
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
             getActivity().finish();
         }
-
-//        if(MskTerz.datake == 0){
-//            if(item.getItemId() == android.R.id.home){
-//                getActivity().finish();
-//            }
-//        }else{
-//            if(item.getItemId() == android.R.id.home){
-//                MskTerz.datake -=1;
-//                getFragmentManager().popBackStack();
-//            }
-//        }
         return super.onOptionsItemSelected(item);
     }
 }

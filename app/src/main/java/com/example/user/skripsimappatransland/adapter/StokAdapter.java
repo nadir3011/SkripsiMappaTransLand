@@ -1,6 +1,7 @@
 package com.example.user.skripsimappatransland.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -67,7 +68,8 @@ public class StokAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof itemViewHolderStok){
-            final Material_Stok material_stok = material_stoks.get(position);
+
+            final Material_Stok material_stok = material_stoks.get((MskTerz.datake*MskTerz.banyakdata)+(position));
             int sekarang = (MskTerz.datake*MskTerz.banyakdata)+(position)+1;
             ((itemViewHolderStok)holder).txt_nomor.setText(String.valueOf(sekarang));
             ((itemViewHolderStok)holder).txt_kode.setText("Kode : "+material_stok.getKode());
@@ -95,6 +97,9 @@ public class StokAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 @Override
                 public void onClick(View view) {
                     StokFragment fragment = new StokFragment(context);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("stok", material_stoks);
+                    fragment.setArguments(bundle);
                     FragmentTransaction fragmentTransaction = fm.beginTransaction();
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     fragmentTransaction.replace(R.id.frame_container, fragment);

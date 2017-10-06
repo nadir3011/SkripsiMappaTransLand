@@ -1,5 +1,6 @@
 package com.example.user.skripsimappatransland.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.user.skripsimappatransland.R;
+import com.example.user.skripsimappatransland.activity.DataMaterialActivity;
 import com.example.user.skripsimappatransland.activity.MaterialInFragmentActivity;
 import com.example.user.skripsimappatransland.activity.MaterialOutFragmentActivity;
 import com.example.user.skripsimappatransland.adapter.MaterialAdapter;
@@ -45,9 +47,10 @@ public class DataMaterialFragment extends Fragment {
     private ArrayList<Material_Stok> material_stoks;
 
     private ArrayList<Material_InOut> material_inOuts;
+    private Context context;
 
-
-    public DataMaterialFragment(){
+    public DataMaterialFragment(Context context){
+        this.context = context;
     }
 
     @Nullable
@@ -63,7 +66,7 @@ public class DataMaterialFragment extends Fragment {
             urutan = getArguments().getInt("position");
             material_apa = getArguments().getInt("transaksi");
 //            Material_Stok material_stok = material_stoks.get(0);
-//            Toast.makeText(getActivity(), "Data ke "+material_stok.getJml_stok(),Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), "Data ke "+urutan,Toast.LENGTH_LONG).show();
             MskTerz.jumlahdatamaterial = material_stoks.size();
         }catch (Exception e){
             Toast.makeText(getActivity(), "Error Material: "+e.toString(),Toast.LENGTH_LONG).show();
@@ -88,6 +91,10 @@ public class DataMaterialFragment extends Fragment {
             ((MaterialOutFragmentActivity)getActivity()).setSupportActionBar(toolbar);
             toolbar.setTitleTextColor(Color.WHITE);
             actionBar = ((MaterialOutFragmentActivity)getActivity()).getSupportActionBar();
+        }else{
+            ((DataMaterialActivity)getActivity()).setSupportActionBar(toolbar);
+            toolbar.setTitleTextColor(Color.WHITE);
+            actionBar = ((DataMaterialActivity)getActivity()).getSupportActionBar();
         }
 
 
@@ -108,7 +115,8 @@ public class DataMaterialFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            getFragmentManager().popBackStack();
+            getActivity().finish();
+//            getFragmentManager().popBackStack();
         }
         return super.onOptionsItemSelected(item);
     }

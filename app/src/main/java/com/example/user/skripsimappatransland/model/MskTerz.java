@@ -13,4 +13,5 @@ public class MskTerz {
     Menampilkan data menggunakan next and prev
     */
     public static int datake=0, banyakdata=10, jumlahdata=29, jumlahdatamaterial = 11, datakematerial=0;
+
 }

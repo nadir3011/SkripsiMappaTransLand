@@ -76,7 +76,7 @@ public class MaterialInFragment extends Fragment implements View.OnClickListener
                     @Override
                     public void onMaterial(ArrayList<Material_Stok> material_stoks) {
                         material_stok = material_stoks;
-                        Toast.makeText(getActivity(), "Jumlah Material : "+material_stoks.size(), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(), "Jumlah Material : "+material_stoks.size(), Toast.LENGTH_LONG).show();
                     }
                 });
             }

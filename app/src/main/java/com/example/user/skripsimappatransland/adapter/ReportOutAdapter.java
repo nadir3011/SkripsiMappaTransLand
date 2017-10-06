@@ -101,7 +101,7 @@ public class ReportOutAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((footerViewHolderMaterial)holder).btn_next.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DataMaterialFragment fragment = new DataMaterialFragment();
+                    DataMaterialFragment fragment = new DataMaterialFragment(context);
                     FragmentTransaction fragmentTransaction = fm.beginTransaction();
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     fragmentTransaction.replace(R.id.frame_container, fragment);

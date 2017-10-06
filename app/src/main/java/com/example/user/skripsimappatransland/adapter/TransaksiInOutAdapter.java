@@ -3,6 +3,7 @@ package com.example.user.skripsimappatransland.adapter;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.skripsimappatransland.R;
+import com.example.user.skripsimappatransland.activity.DataMaterialActivity;
 import com.example.user.skripsimappatransland.fragment.DataMaterialFragment;
 import com.example.user.skripsimappatransland.fragment.MaterialInLanjutFragment;
 import com.example.user.skripsimappatransland.json.JSON;
@@ -208,8 +210,16 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ((itemViewHolderTransaksi)holder).img_material.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    MskTerz.datakematerial = 0;
 
-                    DataMaterialFragment fragment = new DataMaterialFragment();
+//                    Intent i = new Intent(context, DataMaterialActivity.class);
+//                    i.putParcelableArrayListExtra("material",material_stoks);
+//                    i.putParcelableArrayListExtra("inout",material_inOuts);
+//                    i.putExtra("position", position);
+//                    i.putExtra("transaksi", material_apa);
+//                    context.startActivity(i);
+
+                    DataMaterialFragment fragment = new DataMaterialFragment(context);
                     FragmentTransaction fragmentTransaction = fm.beginTransaction();
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("material", material_stoks);

@@ -1,6 +1,9 @@
 package com.example.user.skripsimappatransland.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.skripsimappatransland.activity.StokActivity;
 import com.example.user.skripsimappatransland.fragment.DataMaterialFragment;
 import com.example.user.skripsimappatransland.R;
 import com.example.user.skripsimappatransland.model.Material_InOut;
@@ -78,10 +82,10 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder,final int position) {
         if(holder instanceof itemViewHolderMaterial){
             try {
-                final Material_Stok material_stok = material_stoks.get(position);
+                final Material_Stok material_stok = material_stoks.get((MskTerz.datakematerial*MskTerz.banyakdata)+(position));
                 final int sekarang = (MskTerz.datakematerial*MskTerz.banyakdata)+(position)+1;
                 ((itemViewHolderMaterial)holder).txt_nomor.setText(String.valueOf(sekarang));
                 ((itemViewHolderMaterial)holder).txt_kode.setText("Kode : "+material_stok.getKode());
@@ -90,12 +94,15 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ((itemViewHolderMaterial)holder).img_material.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-//                        Toast.makeText(context,"anda pilih : "+sekarang,Toast.LENGTH_LONG).show();
                         material_inOuts.get(urutan).setKode(material_stok.getKode());
                         material_inOuts.get(urutan).setMaterial(material_stok.getNama());
-//                        Toast.makeText(context,"Kode Material : "+material_inOuts.get(urutan).getKode(),Toast.LENGTH_LONG).show();
 
-                        fm.popBackStack();
+
+                        material_stoks.remove((MskTerz.datakematerial*MskTerz.banyakdata)+(position));
+                        for(int a=0; a<=MskTerz.datakematerial;a++){
+                            fm.popBackStack();
+                        }
+
                     }
                 });
             }catch (Exception e){
@@ -122,7 +129,16 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((footerViewHolderMaterial)holder).btn_next.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DataMaterialFragment fragment = new DataMaterialFragment();
+
+//                    Intent i = new Intent(context, StokActivity.class);
+//                    i.putParcelableArrayListExtra("material",material_stoks);
+//                    context.startActivity(i);
+
+                    DataMaterialFragment fragment = new DataMaterialFragment(context);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("material", material_stoks);
+                    bundle.putParcelableArrayList("inout", material_inOuts);
+                    fragment.setArguments(bundle);
                     FragmentTransaction fragmentTransaction = fm.beginTransaction();
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     fragmentTransaction.replace(R.id.frame_container, fragment);

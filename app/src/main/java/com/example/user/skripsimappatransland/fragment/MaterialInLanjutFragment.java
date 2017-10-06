@@ -85,10 +85,12 @@ public class MaterialInLanjutFragment extends Fragment {
 //    @Override
 //    public void onResume() {
 //        super.onResume();
-////        Toast.makeText(getActivity(),"Refresh", Toast.LENGTH_LONG).show();
+////        Toast.makeText(getActivity(),"Material : " +material_inOuts.get(0).getKode(), Toast.LENGTH_LONG).show();
 //        rv_lm = new LinearLayoutManager(getActivity());
 //        rv.setLayoutManager(rv_lm);
-//        rvAdapter.notifyDataSetChanged();
+////        rvAdapter.notifyDataSetChanged();
+//
+//
 //        rvAdapter = new TransaksiInOutAdapter(getActivity(), getFragmentManager(), material_stok, material_inOuts,jumlah,0,supplier);
 //
 //        rv.setAdapter(rvAdapter);
@@ -110,13 +112,6 @@ public class MaterialInLanjutFragment extends Fragment {
         rv.setLayoutManager(rv_lm);
         rvAdapter = new TransaksiInOutAdapter(getActivity(), getFragmentManager(), material_stok, material_inOuts,jumlah,0,supplier);
         rv.setAdapter(rvAdapter);
-
-//        btn_transaction.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                getActivity().finish();
-//            }
-//        });
     }
 
     @Override
