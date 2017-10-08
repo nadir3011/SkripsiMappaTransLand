@@ -27,34 +27,57 @@
                 android:id="@+id/txt_report_material"
                 android:layout_marginTop="2dp"
                 android:textSize="18sp"
-                android:layout_marginRight="46dp"
-
+                android:layout_marginRight="4dp"
                 android:layout_marginLeft="6dp"
                 android:layout_toEndOf="@id/txt_report_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Material"/>
+                android:text="Tanggal"/>
             <TextView
                 android:id="@+id/txt_report_tanggal"
                 android:textSize="16sp"
                 android:textStyle="italic"
-                android:layout_marginRight="46dp"
+                android:layout_marginRight="4dp"
                 android:layout_below="@id/txt_report_material"
                 android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tanggal / Supplier"/>
+                android:text="Supplier/Tim \n Keterangan "/>
 
-            <TextView
-                android:id="@+id/txt_report_jumlah"
-                android:textSize="16sp"
-                android:textStyle="italic"
-                android:layout_marginRight="46dp"
-                android:layout_below="@id/txt_report_tanggal"
+            <LinearLayout
                 android:layout_marginTop="6dp"
+                android:layout_marginRight="4dp"
+                android:layout_below="@id/txt_report_tanggal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Jumlah @harga / Total"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/txt_report_jumlah"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.5"
+                    android:layout_height="wrap_content"
+                    android:text="Material"/>
+                <TextView
+                    android:id="@+id/txt_report_harga"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Jumlah"/>
+                <TextView
+                    android:id="@+id/txt_report_total"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Total"/>
+            </LinearLayout>
+
+
 
 
         </RelativeLayout>

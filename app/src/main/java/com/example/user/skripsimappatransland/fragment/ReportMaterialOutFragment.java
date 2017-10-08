@@ -16,6 +16,7 @@ import com.example.user.skripsimappatransland.adapter.ReportInAdapter;
 import com.example.user.skripsimappatransland.adapter.ReportOutAdapter;
 import com.example.user.skripsimappatransland.model.ReportIn;
 import com.example.user.skripsimappatransland.model.ReportOut;
+import com.example.user.skripsimappatransland.model.ReportOutGroup;
 
 import java.util.ArrayList;
 
@@ -29,10 +30,10 @@ public class ReportMaterialOutFragment extends Fragment{
     private RecyclerView rv;
     private RecyclerView.LayoutManager rv_lm;
     private RecyclerView.Adapter rvAdapter;
-    private ArrayList<ReportOut> reportOuts;
+    private ArrayList<ReportOutGroup> reportOutGroups;
 
-    public ReportMaterialOutFragment(ArrayList<ReportOut> reportOuts){
-        this.reportOuts = reportOuts;
+    public ReportMaterialOutFragment(ArrayList<ReportOutGroup> reportOutGroups){
+        this.reportOutGroups = reportOutGroups;
     }
 
     @Override
@@ -61,7 +62,7 @@ public class ReportMaterialOutFragment extends Fragment{
         rv_lm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(rv_lm);
 
-        rvAdapter = new ReportOutAdapter(getActivity(), reportOuts, getFragmentManager());
+        rvAdapter = new ReportOutAdapter(getActivity(), reportOutGroups, getFragmentManager());
         rv.setAdapter(rvAdapter);
     }
 }

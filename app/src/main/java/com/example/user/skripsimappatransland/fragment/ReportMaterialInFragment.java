@@ -17,6 +17,7 @@ import com.example.user.skripsimappatransland.json.JSON;
 import com.example.user.skripsimappatransland.model.Material_Stok;
 import com.example.user.skripsimappatransland.model.MskTerz;
 import com.example.user.skripsimappatransland.model.ReportIn;
+import com.example.user.skripsimappatransland.model.ReportInGroup;
 import com.example.user.skripsimappatransland.volley.RequestSTRING;
 
 import org.json.JSONException;
@@ -34,10 +35,14 @@ public class ReportMaterialInFragment extends Fragment{
     private RecyclerView.LayoutManager rv_lm;
     private RecyclerView.Adapter rvAdapter;
     private ArrayList<ReportIn> reportIn;
+    private ArrayList<ReportInGroup> reportInGroup;
 
-    public ReportMaterialInFragment(ArrayList<ReportIn> reportIns){
-        this.reportIn = reportIns;
+//    public ReportMaterialInFragment(ArrayList<ReportIn> reportIns){
+//        this.reportIn = reportIns;
+//    }
 
+    public ReportMaterialInFragment(ArrayList<ReportInGroup> reportInGroup){
+        this.reportInGroup = reportInGroup;
     }
 
     @Override
@@ -66,7 +71,9 @@ public class ReportMaterialInFragment extends Fragment{
         rv_lm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(rv_lm);
 
-        rvAdapter = new ReportInAdapter(getActivity(), reportIn, getFragmentManager());
+//        rvAdapter = new ReportInAdapter(getActivity(), reportIn, getFragmentManager());
+        rvAdapter = new ReportInAdapter(getActivity(), reportInGroup, getFragmentManager());
+
         rv.setAdapter(rvAdapter);
     }
 

@@ -6,7 +6,9 @@ import android.widget.Toast;
 import com.example.user.skripsimappatransland.model.Material_Stok;
 import com.example.user.skripsimappatransland.model.MskTerz;
 import com.example.user.skripsimappatransland.model.ReportIn;
+import com.example.user.skripsimappatransland.model.ReportInGroup;
 import com.example.user.skripsimappatransland.model.ReportOut;
+import com.example.user.skripsimappatransland.model.ReportOutGroup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,6 +109,42 @@ public class JSON{
         }
     }
 
+    public void jsonReportInGroup(String jsonString, DataReportInGroup dataReportInGroup) throws JSONException{
+        JSONObject jsonObject = new JSONObject(jsonString);
+        if(jsonObject.getBoolean("error")==false){
+            JSONArray jsonArray = jsonObject.getJSONArray("hasil");
+            ArrayList<ReportInGroup> reportInGroups = new ArrayList<>();
+            for(int i = 0; i < jsonArray.length(); i++){
+                ReportInGroup reportIn = new ReportInGroup();
+                reportIn.setSupplier(jsonArray.getJSONObject(i).getString("supplier"));
+                reportIn.setTanggal(jsonArray.getJSONObject(i).getString("tanggal"));
+                JSONArray masuk = jsonArray.getJSONObject(i).getJSONArray("masuk");
+                ArrayList<String> material = new ArrayList<>();
+                ArrayList<String> satuan = new ArrayList<String>();
+                ArrayList<String> jumlah = new ArrayList<String>();
+                ArrayList<String> harga = new ArrayList<String>();
+                ArrayList<String> total = new ArrayList<String>();
+                for(int b = 0; b < masuk.length(); b++){
+                    material.add(masuk.getJSONObject(b).getString("material"));
+                    satuan.add(masuk.getJSONObject(b).getString("satuan"));
+                    jumlah.add(masuk.getJSONObject(b).getString("jumlah"));
+                    harga.add(masuk.getJSONObject(b).getString("harga"));
+                    total.add(masuk.getJSONObject(b).getString("total"));
+
+                    reportIn.setMaterial(material);
+                    reportIn.setSatuan(satuan);
+                    reportIn.setJumlah(jumlah);
+                    reportIn.setHarga(harga);
+                    reportIn.setTotal(total);
+                }
+                reportInGroups.add(reportIn);
+            }
+            dataReportInGroup.onReport(reportInGroups);
+        }else{
+            Toast.makeText(context,"Message : "+jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void jsonReportOut(String jsonString, DataReportOut dataReportOut) throws JSONException{
         JSONObject jsonObject = new JSONObject(jsonString);
         if(jsonObject.getBoolean("error")==false){
@@ -128,6 +166,43 @@ public class JSON{
         }
     }
 
+    public void jsonReportOutGroup(String jsonString, DataReportOutGroup dataReportOutGroup) throws JSONException{
+        JSONObject jsonObject = new JSONObject(jsonString);
+        if(jsonObject.getBoolean("error")==false){
+            JSONArray jsonArray = jsonObject.getJSONArray("hasil");
+            ArrayList<ReportOutGroup> reportOutGroups = new ArrayList<>();
+            for(int i = 0; i < jsonArray.length(); i++){
+                ReportOutGroup reportIn = new ReportOutGroup();
+                reportIn.setTim(jsonArray.getJSONObject(i).getString("tim"));
+                reportIn.setTanggal(jsonArray.getJSONObject(i).getString("tanggal"));
+                reportIn.setKeterangan(jsonArray.getJSONObject(i).getString("keterangan"));
+                JSONArray masuk = jsonArray.getJSONObject(i).getJSONArray("keluar");
+                ArrayList<String> material = new ArrayList<>();
+                ArrayList<String> satuan = new ArrayList<String>();
+                ArrayList<String> jumlah = new ArrayList<String>();
+                ArrayList<String> harga = new ArrayList<String>();
+                ArrayList<String> total = new ArrayList<String>();
+                for(int b = 0; b < masuk.length(); b++){
+                    material.add(masuk.getJSONObject(b).getString("material"));
+                    satuan.add(masuk.getJSONObject(b).getString("satuan"));
+                    jumlah.add(masuk.getJSONObject(b).getString("jumlah"));
+                    harga.add(masuk.getJSONObject(b).getString("harga"));
+                    total.add(masuk.getJSONObject(b).getString("total"));
+
+                    reportIn.setMaterial(material);
+                    reportIn.setSatuan(satuan);
+                    reportIn.setJumlah(jumlah);
+                    reportIn.setHarga(harga);
+                    reportIn.setTotal(total);
+                }
+                reportOutGroups.add(reportIn);
+            }
+            dataReportOutGroup.onReport(reportOutGroups);
+        }else{
+            Toast.makeText(context,"Message : "+jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+        }
+    }
+
     public interface DataMaterial{
         void onMaterial(ArrayList<Material_Stok> material_stoks);
     }
@@ -136,8 +211,16 @@ public class JSON{
         void onReport(ArrayList<ReportIn> reportIns);
     }
 
+    public interface DataReportInGroup{
+        void onReport(ArrayList<ReportInGroup> reportInGroups);
+    }
+
     public interface DataReportOut{
         void onReport(ArrayList<ReportOut> reportOuts);
+    }
+
+    public interface DataReportOutGroup{
+        void onReport(ArrayList<ReportOutGroup> reportOutGroups);
     }
 
 //    public void jsonDataMaterialStok(String jsonString, DataMaterial dataMaterial) throws JSONException{

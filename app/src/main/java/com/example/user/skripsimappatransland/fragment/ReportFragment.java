@@ -15,7 +15,9 @@ import com.example.user.skripsimappatransland.R;
 import com.example.user.skripsimappatransland.json.JSON;
 import com.example.user.skripsimappatransland.model.MskTerz;
 import com.example.user.skripsimappatransland.model.ReportIn;
+import com.example.user.skripsimappatransland.model.ReportInGroup;
 import com.example.user.skripsimappatransland.model.ReportOut;
+import com.example.user.skripsimappatransland.model.ReportOutGroup;
 import com.example.user.skripsimappatransland.model.ViewPagerAdapter;
 import com.example.user.skripsimappatransland.volley.RequestSTRING;
 
@@ -34,12 +36,17 @@ public class ReportFragment extends Fragment{
     FragmentActivity fragmentActivity;
     ViewPagerAdapter viewPagerAdapter;
 
-    private ArrayList<ReportIn> reportIn;
-    private ArrayList<ReportOut> reportOut;
+    private ArrayList<ReportOutGroup> reportOutGroup;
+    private ArrayList<ReportInGroup> reportInGroup;
 
-    public ReportFragment(ArrayList<ReportIn> reportIn, ArrayList<ReportOut> reportOut){
-        this.reportIn = reportIn;
-        this.reportOut = reportOut;
+//    public ReportFragment(ArrayList<ReportIn> reportIn, ArrayList<ReportOut> reportOut){
+//        this.reportIn = reportIn;
+//        this.reportOut = reportOut;
+//    }
+
+    public ReportFragment(ArrayList<ReportInGroup> reportInGroups, ArrayList<ReportOutGroup> reportOutGroups){
+        this.reportInGroup = reportInGroups;
+        this.reportOutGroup = reportOutGroups;
     }
 
 
@@ -69,8 +76,9 @@ public class ReportFragment extends Fragment{
 
     private void setupViewPager(ViewPager viewPager){
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPagerAdapter.addFragment(new ReportMaterialInFragment(reportIn), "Material In");
-        viewPagerAdapter.addFragment(new ReportMaterialOutFragment(reportOut), "Material Out");
+//        viewPagerAdapter.addFragment(new ReportMaterialInFragment(reportIn), "Material In");
+        viewPagerAdapter.addFragment(new ReportMaterialInFragment(reportInGroup), "Material In");
+        viewPagerAdapter.addFragment(new ReportMaterialOutFragment(reportOutGroup), "Material Out");
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.getAdapter().notifyDataSetChanged();
     }

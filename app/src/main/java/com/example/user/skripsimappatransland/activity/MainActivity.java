@@ -24,7 +24,9 @@ import com.example.user.skripsimappatransland.model.BottomNavigationViewHelper;
 import com.example.user.skripsimappatransland.model.CekConnection;
 import com.example.user.skripsimappatransland.model.MskTerz;
 import com.example.user.skripsimappatransland.model.ReportIn;
+import com.example.user.skripsimappatransland.model.ReportInGroup;
 import com.example.user.skripsimappatransland.model.ReportOut;
+import com.example.user.skripsimappatransland.model.ReportOutGroup;
 import com.example.user.skripsimappatransland.volley.RequestSTRING;
 
 import org.json.JSONException;
@@ -41,8 +43,9 @@ public class MainActivity extends AppCompatActivity implements
     private Toolbar toolbar;
     private Context context;
 
-    private ArrayList<ReportIn> reportIn;
-    private ArrayList<ReportOut> reportOut;
+    private ArrayList<ReportOutGroup> reportOutGroup;
+
+    private ArrayList<ReportInGroup> reportInGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +92,9 @@ public class MainActivity extends AppCompatActivity implements
                 fragmentTransaction.replace(R.id.mainContainer,fragment).commit();
                 break;
             case R.id.bottom_report:
-                getReportIn();
-                getReportOut();
+//                getReportIn();
+                getReportInGroup();
+                getReportOutGroup();
 //                fragment = new ReportFragment(reportIn);
                 break;
             case R.id.bottom_akun:
@@ -105,9 +109,10 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-    void getReportIn(){
+
+    void getReportInGroup(){
         RequestSTRING rs = new RequestSTRING(context);
-        rs.setUrlnya(MskTerz.url+"/cekmaterialmasukuser/"+MskTerz.M_apikey);
+        rs.setUrlnya(MskTerz.url+"/cekmaterialmasukusergroup/"+MskTerz.M_apikey);
         rs.setTitle("Report Material Ku");
         rs.setMessage("Proses . . . . !");
         rs.setTagString("MSKTERZ_REPORT");
@@ -117,22 +122,19 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onSuccess(String result) throws JSONException {
                 JSON json = new JSON(context);
-                json.jsonReportIn(result, new JSON.DataReportIn() {
+                json.jsonReportInGroup(result, new JSON.DataReportInGroup() {
                     @Override
-                    public void onReport(ArrayList<ReportIn> reportIns) {
-                        reportIn = reportIns;
-//                        fragment = new ReportFragment(reportIn,reportOut);
-//                        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                        fragmentTransaction.replace(R.id.mainContainer,fragment).commit();
+                    public void onReport(ArrayList<ReportInGroup> reportInGroups) {
+                        reportInGroup = reportInGroups;
                     }
                 });
             }
         });
     }
 
-    void getReportOut(){
+    void getReportOutGroup(){
         RequestSTRING rs = new RequestSTRING(context);
-        rs.setUrlnya(MskTerz.url+"/cekmaterialkeluaruser/"+MskTerz.M_apikey);
+        rs.setUrlnya(MskTerz.url+"/cekmaterialkeluarusergroup/"+MskTerz.M_apikey);
         rs.setTitle("Report Material Ku");
         rs.setMessage("Proses . . . . !");
         rs.setTagString("MSKTERZ_REPORT");
@@ -142,11 +144,11 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onSuccess(String result) throws JSONException {
                 JSON json = new JSON(context);
-                json.jsonReportOut(result, new JSON.DataReportOut() {
+                json.jsonReportOutGroup(result, new JSON.DataReportOutGroup() {
                     @Override
-                    public void onReport(ArrayList<ReportOut> reportOuts) {
-                        reportOut = reportOuts;
-                        fragment = new ReportFragment(reportIn,reportOut);
+                    public void onReport(ArrayList<ReportOutGroup> reportOutGroups) {
+                        reportOutGroup = reportOutGroups;
+                        fragment = new ReportFragment(reportInGroup,reportOutGroup);
                         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.mainContainer,fragment).commit();
                     }

@@ -177,6 +177,16 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     material_inOuts.get(position).setHarga(((itemViewHolderTransaksi)holder).edt_harga.getText().toString());
 
+                    String harga = ((itemViewHolderTransaksi)holder).edt_harga.getText().toString();
+                    Integer jumlah = Integer.parseInt(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
+                    Double total = 0.0;
+                    if(harga.length() != 0){
+                        total = Double.parseDouble(harga) * jumlah;
+                        ((itemViewHolderTransaksi)holder).edt_total.setText(String.valueOf(total));
+                    }else{
+                        ((itemViewHolderTransaksi)holder).edt_total.setText("");
+                    }
+
 //                    material_inOut.setHarga(((itemViewHolderTransaksi)holder).edt_harga.getText().toString());
                 }
 
@@ -204,6 +214,28 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 @Override
                 public void afterTextChanged(Editable editable) {
 
+                }
+            });
+
+            ((itemViewHolderTransaksi)holder).img_kurang.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int kurang = Integer.parseInt(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
+                    if(kurang > 1){
+                        kurang -= 1;
+                        ((itemViewHolderTransaksi)holder).edt_jumlah.setText(String.valueOf(kurang));
+                    }
+                }
+            });
+
+            ((itemViewHolderTransaksi)holder).img_tambah.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int tambah = Integer.parseInt(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
+                    if(tambah >= 1 && tambah <= 150){
+                        tambah +=1;
+                        ((itemViewHolderTransaksi)holder).edt_jumlah.setText(String.valueOf(tambah));
+                    }
                 }
             });
 
@@ -391,7 +423,7 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public View view;
         private TextView txt_nomor, txt_kode, txt_material;
         private EditText edt_jumlah, edt_harga, edt_total;
-        private ImageView img_material;
+        private ImageView img_material, img_tambah, img_kurang;
         public itemViewHolderTransaksi(View v) {
             super(v);
             view = v;
@@ -404,6 +436,8 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             edt_total = (EditText) v.findViewById(R.id.edt_trans_total);
 
             img_material = (ImageView) v.findViewById(R.id.img_trans_material);
+            img_kurang = (ImageView) v.findViewById(R.id.img_kurang);
+            img_tambah = (ImageView) v.findViewById(R.id.img_tambah);
 
         }
     }

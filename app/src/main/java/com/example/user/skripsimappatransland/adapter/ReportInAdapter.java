@@ -18,8 +18,10 @@ import com.example.user.skripsimappatransland.model.Material_InOut;
 import com.example.user.skripsimappatransland.model.Material_Stok;
 import com.example.user.skripsimappatransland.model.MskTerz;
 import com.example.user.skripsimappatransland.model.ReportIn;
+import com.example.user.skripsimappatransland.model.ReportInGroup;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * Created by User on 8/8/2017.
@@ -30,14 +32,15 @@ public class ReportInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int TYPE_ITEM = 0;
     private final int TYPE_FOOTER = 1;
     private Context context;
-    private ArrayList<ReportIn> reportIns;
+
+    private ArrayList<ReportInGroup> reportInGroups;
     private FragmentManager fm;
 
 
-    public ReportInAdapter(Context context, ArrayList<ReportIn> reportIns, FragmentManager fm){
+    public ReportInAdapter(Context context, ArrayList<ReportInGroup> reportInGroups, FragmentManager fm){
         super();
         this.context = context;
-        this.reportIns = reportIns;
+        this.reportInGroups= reportInGroups;
         this.fm = fm;
     }
 
@@ -49,10 +52,10 @@ public class ReportInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private Boolean isPositionFooter(int position){
-        if(reportIns.size()==position){
+        if(reportInGroups.size()==position){
             return true;
         }
-        return position >= reportIns.size()-1;
+        return position >= reportInGroups.size()-1;
     }
 
     @Override
@@ -71,13 +74,29 @@ public class ReportInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof itemViewHolderMaterial){
             try {
-                final ReportIn reportIn = reportIns.get(position);
                 final int sekarang = (position)+1;
+
+                final ReportInGroup reportInGroup = reportInGroups.get(position);
                 ((itemViewHolderMaterial)holder).txt_nomor.setText(String.valueOf(sekarang));
-                ((itemViewHolderMaterial)holder).txt_material.setText(reportIn.getMaterial());
-                ((itemViewHolderMaterial)holder).txt_tanggal.setText(reportIn.getTanggal() + "("+reportIn.getSupplier()+")");
-                double total = Double.parseDouble(reportIn.getJumlah())*Double.parseDouble(reportIn.getHarga());
-                ((itemViewHolderMaterial)holder).txt_jumlah.setText("Qty => "+reportIn.getJumlah()+"@Rp. "+reportIn.getHarga()+" (Rp. "+total+")");
+                ((itemViewHolderMaterial)holder).txt_material.setText(reportInGroup.getTanggal());
+                ((itemViewHolderMaterial)holder).txt_tanggal.setText("Supplier = "+reportInGroup.getSupplier());
+                String material = "";
+                String harga = "";
+                String total = "";
+                int totalnya = 0;
+                for(int a=0;a < reportInGroup.getMaterial().size();a++){
+                    material += String.valueOf(a+1)+". "+reportInGroup.getMaterial().get(a)+"\n";
+                    harga += " = "+reportInGroup.getJumlah().get(a)+" * "+reportInGroup.getHarga().get(a)+"\n";
+                    total += " = "+reportInGroup.getTotal().get(a)+"\n";
+                    totalnya += Integer.parseInt(reportInGroup.getTotal().get(a));
+                }
+                material += "  Total";
+                harga += "";
+                total += " = "+String.valueOf(totalnya);
+                ((itemViewHolderMaterial)holder).txt_jumlah.setText(material);
+                ((itemViewHolderMaterial)holder).txt_harga.setText(harga);
+                ((itemViewHolderMaterial)holder).txt_total.setText(total);
+
             }catch (Exception e){
                 Toast.makeText(context, "Error : "+e.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -124,7 +143,10 @@ public class ReportInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return reportIns.size();
+//        return reportIns.size();
+
+        return reportInGroups.size();
+
 //        int asli = MskTerz.jumlahdatamaterial / MskTerz.banyakdata;
 //        if(MskTerz.jumlahdatamaterial < MskTerz.banyakdata){
 //            return MskTerz.jumlahdatamaterial;
@@ -139,7 +161,7 @@ public class ReportInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public class itemViewHolderMaterial extends RecyclerView.ViewHolder{
         private View view;
-        private TextView txt_nomor, txt_material, txt_tanggal, txt_jumlah;
+        private TextView txt_nomor, txt_material, txt_tanggal, txt_jumlah, txt_harga, txt_total;
         private ImageView img_material;
 
         public itemViewHolderMaterial(View v) {
@@ -149,6 +171,8 @@ public class ReportInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             txt_tanggal = (TextView) v.findViewById(R.id.txt_report_tanggal);
             txt_material = (TextView) v.findViewById(R.id.txt_report_material);
             txt_jumlah = (TextView) v.findViewById(R.id.txt_report_jumlah);
+            txt_harga = (TextView) v.findViewById(R.id.txt_report_harga);
+            txt_total = (TextView) v.findViewById(R.id.txt_report_total);
 //            img_material = (ImageView) v.findViewById(R.id.img_material);
         }
     }
