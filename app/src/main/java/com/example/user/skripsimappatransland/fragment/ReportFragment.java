@@ -76,9 +76,8 @@ public class ReportFragment extends Fragment{
 
     private void setupViewPager(ViewPager viewPager){
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-//        viewPagerAdapter.addFragment(new ReportMaterialInFragment(reportIn), "Material In");
-        viewPagerAdapter.addFragment(new ReportMaterialInFragment(reportInGroup), "Material In");
-        viewPagerAdapter.addFragment(new ReportMaterialOutFragment(reportOutGroup), "Material Out");
+        viewPagerAdapter.addFragment(new ReportMaterialInFragment(reportInGroup), "Pembelian");
+        viewPagerAdapter.addFragment(new ReportMaterialOutFragment(reportOutGroup), "Pemakaian");
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.getAdapter().notifyDataSetChanged();
     }

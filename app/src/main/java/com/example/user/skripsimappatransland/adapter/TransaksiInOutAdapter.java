@@ -309,7 +309,7 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             rs.setMessage("Proses . . . . !");
             rs.setTagString("MSKTERZ_INOUT");
             rs.setKeynya(new String[]{"transaksi", "material", "user", "supplier", "jumlah", "harga"});
-            rs.setValuenya(new String[]{kodeTransaksi, "MTR-001",  MskTerz.M_user, supplier, material_inOut.getJumlah(), material_inOut.getHarga()});
+            rs.setValuenya(new String[]{kodeTransaksi, material_inOut.getKode(),  MskTerz.M_user, supplier, material_inOut.getJumlah(), material_inOut.getHarga()});
             rs.string_post(new RequestSTRING.VolleyCallBack() {
                 @Override
                 public void onSuccess(String result) throws JSONException {
