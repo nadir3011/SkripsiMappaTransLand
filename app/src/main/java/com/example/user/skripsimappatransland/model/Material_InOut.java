@@ -9,8 +9,8 @@ import android.os.Parcelable;
 
 public class Material_InOut implements Parcelable {
 
-    String kode, jumlah, harga, material;
-    int position;
+    String kode, jumlah, harga, material, total;
+    int position, stok;
 
     public void setMaterial(String material) {
         this.material = material;
@@ -18,6 +18,22 @@ public class Material_InOut implements Parcelable {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public void setStok(int stok) {
+        this.stok = stok;
+    }
+
+    public int getStok() {
+        return stok;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    public String getTotal() {
+        return total;
     }
 
     public void setHarga(String harga) {
@@ -63,7 +79,9 @@ public class Material_InOut implements Parcelable {
         dest.writeString(this.jumlah);
         dest.writeString(this.harga);
         dest.writeString(this.material);
+        dest.writeString(this.total);
         dest.writeInt(this.position);
+        dest.writeInt(this.stok);
     }
 
     public Material_InOut() {
@@ -74,7 +92,9 @@ public class Material_InOut implements Parcelable {
         this.jumlah = in.readString();
         this.harga = in.readString();
         this.material = in.readString();
+        this.total = in.readString();
         this.position = in.readInt();
+        this.stok = in.readInt();
     }
 
     public static final Parcelable.Creator<Material_InOut> CREATOR = new Parcelable.Creator<Material_InOut>() {

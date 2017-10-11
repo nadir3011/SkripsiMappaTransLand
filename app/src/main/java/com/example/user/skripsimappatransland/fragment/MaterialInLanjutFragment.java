@@ -72,6 +72,8 @@ public class MaterialInLanjutFragment extends Fragment {
                 material_inOut.setJumlah("1");
                 material_inOut.setHarga("");
                 material_inOut.setMaterial("");
+                material_inOut.setTotal("");
+                material_inOut.setStok(0);
                 material_inOuts.add(material_inOut);
             }
         }

@@ -108,7 +108,7 @@ public class DataMaterialFragment extends Fragment {
         rv_lm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(rv_lm);
 
-        rvAdapter = new MaterialAdapter(getActivity(), material_stoks, material_inOuts, getFragmentManager(), urutan);
+        rvAdapter = new MaterialAdapter(getActivity(), material_stoks, material_inOuts, getFragmentManager(), urutan, material_apa);
         rv.setAdapter(rvAdapter);
     }
 

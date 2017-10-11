@@ -37,7 +37,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private ArrayList<Material_Stok> material_stoks;
     private ArrayList<Material_InOut> material_inOuts;
     private FragmentManager fm;
-    private int urutan;
+    private int urutan, pakai_beli;
 
 //    public MaterialAdapter(Context context, List<Material_Stok> material_stoks){
 //        super();
@@ -45,12 +45,13 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        this.material_stoks = material_stoks;
 //    }
 
-    public MaterialAdapter(Context context, ArrayList<Material_Stok> material_stoks, ArrayList<Material_InOut> material_inOuts, FragmentManager fm, int urutan){
+    public MaterialAdapter(Context context, ArrayList<Material_Stok> material_stoks, ArrayList<Material_InOut> material_inOuts, FragmentManager fm, int urutan, int pakai_beli){
         super();
         this.context = context;
         this.material_stoks = material_stoks;
         this.material_inOuts = material_inOuts;
         this.urutan = urutan;
+        this.pakai_beli = pakai_beli;
         this.fm = fm;
     }
 
@@ -94,8 +95,18 @@ public class MaterialAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ((itemViewHolderMaterial)holder).img_material.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        material_inOuts.get(urutan).setKode(material_stok.getKode());
-                        material_inOuts.get(urutan).setMaterial(material_stok.getNama());
+
+
+                        if(pakai_beli==1){
+                            material_inOuts.get(urutan).setKode(material_stok.getKode());
+                            material_inOuts.get(urutan).setMaterial(material_stok.getNama());
+                            material_inOuts.get(urutan).setStok(Integer.parseInt(material_stok.getJml_stok()));
+                            material_inOuts.get(urutan).setHarga(material_stok.getHarga());
+                        }else if(pakai_beli==0){
+                            material_inOuts.get(urutan).setKode(material_stok.getKode());
+                            material_inOuts.get(urutan).setMaterial(material_stok.getNama()+" Rp. "+material_stok.getHarga());
+                            material_inOuts.get(urutan).setStok(Integer.parseInt(material_stok.getJml_stok()));
+                        }
 
 
                         material_stoks.remove((MskTerz.datakematerial*MskTerz.banyakdata)+(position));

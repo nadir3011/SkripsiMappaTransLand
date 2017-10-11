@@ -137,11 +137,17 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             ((itemViewHolderTransaksi)holder).txt_nomor.setText(String.valueOf(position+1));
             ((itemViewHolderTransaksi)holder).txt_kode.setText(material_inOut.getKode());
-            ((itemViewHolderTransaksi)holder).txt_material.setText(material_inOut.getMaterial());
+            ((itemViewHolderTransaksi)holder).txt_material.setText(material_inOut.getMaterial()+" ("+material_inOut.getStok()+")");
 
             ((itemViewHolderTransaksi)holder).edt_jumlah.setText(material_inOut.getJumlah());
             ((itemViewHolderTransaksi)holder).edt_harga.setText(material_inOut.getHarga());
-            ((itemViewHolderTransaksi)holder).edt_total.setText("");
+            ((itemViewHolderTransaksi)holder).edt_total.setText(material_inOut.getTotal());
+
+            if(material_apa == material_ouput){
+                ((itemViewHolderTransaksi)holder).edt_harga.setEnabled(false);
+            }
+
+            ((itemViewHolderTransaksi)holder).edt_total.setEnabled(false);
 
 
             ((itemViewHolderTransaksi)holder).edt_jumlah.addTextChangedListener(new TextWatcher() {
@@ -183,8 +189,10 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     if(harga.length() != 0){
                         total = Double.parseDouble(harga) * jumlah;
                         ((itemViewHolderTransaksi)holder).edt_total.setText(String.valueOf(total));
+                        material_inOut.setTotal(((itemViewHolderTransaksi)holder).edt_total.getText().toString());
                     }else{
                         ((itemViewHolderTransaksi)holder).edt_total.setText("");
+                        material_inOut.setTotal(((itemViewHolderTransaksi)holder).edt_total.getText().toString());
                     }
 
 //                    material_inOut.setHarga(((itemViewHolderTransaksi)holder).edt_harga.getText().toString());
@@ -221,10 +229,27 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 @Override
                 public void onClick(View view) {
                     int kurang = Integer.parseInt(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
-                    if(kurang > 1){
-                        kurang -= 1;
-                        ((itemViewHolderTransaksi)holder).edt_jumlah.setText(String.valueOf(kurang));
+                    if(material_inOut.getStok() > kurang && material_apa==material_ouput){
+                        if(kurang > 1){
+                            kurang -= 1;
+                            ((itemViewHolderTransaksi)holder).edt_jumlah.setText(String.valueOf(kurang));
+
+                            String harga = ((itemViewHolderTransaksi)holder).edt_harga.getText().toString();
+                            Integer jumlah = Integer.parseInt(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
+                            Double total = 0.0;
+                            if(harga.length() != 0){
+                                total = Double.parseDouble(harga) * jumlah;
+                                ((itemViewHolderTransaksi)holder).edt_total.setText(String.valueOf(total));
+                                material_inOut.setTotal(((itemViewHolderTransaksi)holder).edt_total.getText().toString());
+                            }
+                        }
+                    }else if(material_apa == material_input){
+                        if(kurang > 1){
+                            kurang -= 1;
+                            ((itemViewHolderTransaksi)holder).edt_jumlah.setText(String.valueOf(kurang));
+                        }
                     }
+
                 }
             });
 
@@ -232,10 +257,27 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 @Override
                 public void onClick(View view) {
                     int tambah = Integer.parseInt(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
-                    if(tambah >= 1 && tambah <= 150){
-                        tambah +=1;
-                        ((itemViewHolderTransaksi)holder).edt_jumlah.setText(String.valueOf(tambah));
+                    if(material_inOut.getStok() > tambah && material_apa==material_ouput){
+                        if(tambah >= 0 && tambah <= 150){
+                            tambah +=1;
+                            ((itemViewHolderTransaksi)holder).edt_jumlah.setText(String.valueOf(tambah));
+
+                            String harga = ((itemViewHolderTransaksi)holder).edt_harga.getText().toString();
+                            Integer jumlah = Integer.parseInt(((itemViewHolderTransaksi)holder).edt_jumlah.getText().toString());
+                            Double total = 0.0;
+                            if(harga.length() != 0){
+                                total = Double.parseDouble(harga) * jumlah;
+                                ((itemViewHolderTransaksi)holder).edt_total.setText(String.valueOf(total));
+                                material_inOut.setTotal(((itemViewHolderTransaksi)holder).edt_total.getText().toString());
+                            }
+                        }
+                    }else if(material_apa == material_input){
+                        if(tambah >= 1 && tambah <= 150){
+                            tambah +=1;
+                            ((itemViewHolderTransaksi)holder).edt_jumlah.setText(String.valueOf(tambah));
+                        }
                     }
+
                 }
             });
 
@@ -336,9 +378,11 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
         });
 
+
+
         for(int a = 0; a < jumlah;a++) {
             Material_InOut material_inOut = (Material_InOut) material_inOuts.get(a);
-            if (material_inOut.getJumlah().length() == 0 || material_inOut.getHarga().length() == 0 || material_inOut.getKode().length() == 0) {
+            if (material_inOut.getJumlah().length() == 0 || material_inOut.getHarga().length() == 0 || material_inOut.getKode().length() == 0 || material_inOut.getStok()==0) {
                 Toast.makeText(context, "Data Jumlah Belum Di Isi...! - " + (material_inOut.getPosition() + 1), Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -355,7 +399,7 @@ public class TransaksiInOutAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             rs.setMessage("Proses . . . . !");
             rs.setTagString("MSKTERZ_INOUT");
             rs.setKeynya(new String[]{"transaksi", "material", "user", "tim", "jumlah", "harga", "ket"});
-            rs.setValuenya(new String[]{kodeTransaksi, "MTR-001",  MskTerz.M_user, team, material_inOut.getJumlah(), material_inOut.getHarga(), keterangan});
+            rs.setValuenya(new String[]{kodeTransaksi, material_inOut.getKode(),  MskTerz.M_user, team, material_inOut.getJumlah(), material_inOut.getHarga(), keterangan});
             rs.string_post(new RequestSTRING.VolleyCallBack() {
                 @Override
                 public void onSuccess(String result) throws JSONException {

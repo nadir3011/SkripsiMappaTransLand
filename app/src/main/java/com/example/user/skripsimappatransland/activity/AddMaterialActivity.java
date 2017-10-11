@@ -32,6 +32,7 @@ public class AddMaterialActivity extends AppCompatActivity{
     private EditText edt_material, edt_unit, edt_price;
     private Context context;
     private CekConnection cc;
+    String kode="";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,24 +80,40 @@ public class AddMaterialActivity extends AppCompatActivity{
                     rs.setTagString("MSKTERZ_KODE");
                     rs.setKeynya(new String[]{"table","kolom","lebar","awalan","user"});
                     rs.setValuenya(new String[]{"mskter_material", "kd_material", "3", "MTR-", MskTerz.M_user});
-                    rs.string_post(new RequestSTRING.VolleyCallBack() {
+                    rs.string_status(new RequestSTRING.VolleyCallBack() {
                         @Override
                         public void onSuccess(String result) throws JSONException{
-                            String kode="";
+
                             JSON json = new JSON(context);
                             kode = json.jsonKode(result);
-                            if(kode.length()==0){
-                                Toast.makeText(context,"Tidak Berhasil",Toast.LENGTH_SHORT).show();
-                            }else{
-                                Toast.makeText(context,"Kode : "+kode,Toast.LENGTH_SHORT).show();
-//                                RequestSTRING rs = new RequestSTRING(context);
-//                                rs.setUrlnya(MskTerz.url+"/addmaterial/"+MskTerz.M_apikey);
-                            }
                         }
                     });
+
+                    if(kode.length() != 0){
+                        RequestSTRING rs1 = new RequestSTRING(context);
+                        rs1.setUrlnya(MskTerz.url+"/addmaterial/"+MskTerz.M_apikey);
+                        rs1.setTitle("Tambah Material");
+                        rs1.setMessage("Proses . . . . !");
+                        rs1.setTagString("MSKTERZ_ADD");
+                        rs1.setKeynya(new String[]{"kd","material","satuan","harga","user"});
+                        rs1.setValuenya(new String[]{kode, material, unit, price, MskTerz.M_user});
+                        rs1.string_post(new RequestSTRING.VolleyCallBack() {
+                            @Override
+                            public void onSuccess(String result) throws JSONException {
+                                JSON json = new JSON(context);
+                                if(json.jsonSukses(result)){
+                                    finish();
+                                }else{
+                                    Toast.makeText(context,"Tidak Berhasil : "+kode,Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
                 }else{
                     Toast.makeText(context,"Tidak Terhubung Internet . . . ",Toast.LENGTH_SHORT).show();
                 }
+
+
 
             }
         });
